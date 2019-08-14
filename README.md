@@ -12,6 +12,6 @@
 	- Se documentaron algunas clases del proyecto.
 
 - **Versión 2**
-	- Se agregó el ajuste para comprar también los hijos del XML (cuando sea el caso).
+	- Se agregó el ajuste para comparar también los hijos del XML (cuando sea el caso).
 	- Se cambió la forma en que se leen e ingresan los datos (en este caso las rutas donde se encuentran los archivos y carpetas a comparar), con el objetivo de tener ejecuciones simultáneas, es decir, que se ejecuten pruebas inmediatamente después de que termine la anterior.  Los datos ya se ingresan desde el feature.
 	- Se documentaron algunas clases del proyecto.
