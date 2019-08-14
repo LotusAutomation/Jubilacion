@@ -25,34 +25,47 @@ public class FormatosCampos {
 			valueTemp = valueTemp.replaceAll("\t", "");
 			valueTemp = valueTemp.replaceAll("\n", "");
 			valueTemp = valueTemp.replaceAll("\\\\", "/");
+			valueTemp = valueTemp.replaceAll("..,", ",");
+			valueTemp = valueTemp.replaceAll(".,", ",");
+			valueTemp = valueTemp.replaceAll("..]", "]");
+			valueTemp = valueTemp.replaceAll(".]", "]");
+			valueTemp = valueTemp.replaceAll(" ", "");
+
 		}
 		return valueTemp;
 	}
 
 	public String formatDateString(String value) {
-		// System.out.println("Fecha entrada:... " + value);
+
 		value = value.replace(".", "");
 		String dateAux = "";
 		SimpleDateFormat originalFormat;
+
 		// SimpleDateFormat newFormat = new SimpleDateFormat("dd/MM/yyyy h:mm:ss a");
 		SimpleDateFormat newFormat = new SimpleDateFormat("dd/MM/yyyy");
 		Date date;
+
 		try {
 			originalFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 			date = originalFormat.parse(value.trim());
 			dateAux = newFormat.format(date);
+
 		} catch (ParseException e) {
-			// System.out.println("*********************************"+value);
+
 			originalFormat = new SimpleDateFormat("dd/MM/yyyy");
 			try {
+
 				date = originalFormat.parse(value.trim());
 				dateAux = newFormat.format(date);
-				// System.out.println("+++++++++++++++++++++++++++++"+dateAux);
+
 			} catch (ParseException e1) {
+
 				originalFormat = new SimpleDateFormat("dd-MM-yyyy");
 				try {
+
 					date = originalFormat.parse(value.trim());
 					dateAux = newFormat.format(date);
+
 				} catch (ParseException e2) {
 					originalFormat = new SimpleDateFormat("yyyyMMdd");
 					try {
@@ -64,16 +77,17 @@ public class FormatosCampos {
 				}
 			}
 		}
-		// System.out.println("Fecha de salida:.. " + dateAux);
 		return dateAux;
 	}
 
 	public String formatNumber(String valueField) {
+
 		DecimalFormatSymbols formatSymbols = new DecimalFormatSymbols(Locale.getDefault());
 
 		formatSymbols.setDecimalSeparator(',');
 		DecimalFormat df = new DecimalFormat("#,##0.#######", formatSymbols);
 		String valueFormatter = valueField;
+
 		if (valueField.contains(".")) {
 			valueFormatter = df.format(Double.parseDouble(valueField));
 		}
@@ -81,11 +95,12 @@ public class FormatosCampos {
 	}
 
 	public String formatDate(String valueFieldJSON, boolean time, boolean isXML) {
+
 		String dateAux = "";
 		SimpleDateFormat originalFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss a");
 		SimpleDateFormat newFormat = new SimpleDateFormat("yyyyMMdd'T'HHmmss");
 		// SimpleDateFormat newFormat = new SimpleDateFormat("dd/MM/yyyy");
-		// System.out.println("formatDate valueFieldJSON::. " + valueFieldJSON);
+
 		if (!time) {
 			newFormat = new SimpleDateFormat("yyyyMMdd");
 			// newFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -112,6 +127,7 @@ public class FormatosCampos {
 	}
 
 	public ArrayList<String> originalArray(ArrayList<String> valueArrList) {
+
 		String[] valueArr = (String[]) valueArrList.toArray(new String[valueArrList.size()]);
 		String[] newValueArr = Arrays.stream(valueArr).filter(value -> value != null && value.length() > 0)
 				.toArray(size -> new String[size]);
@@ -120,11 +136,12 @@ public class FormatosCampos {
 	}
 
 	public String extractOnlyFileName(String nameAnexo) {
+
 		String[] arrOnlyFileName = null;
 		String onlyFileName = nameAnexo;
+
 		try {
 			onlyFileName = nameAnexo.replaceAll("\\\\", "/");
-
 			arrOnlyFileName = onlyFileName.split("/");
 			onlyFileName = arrOnlyFileName[((arrOnlyFileName.length) - 1)];
 

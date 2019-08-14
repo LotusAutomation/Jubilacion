@@ -18,13 +18,9 @@ public class ListaUrlLotusServer {
 
 	public static List<String> porCadaUniversalId() {
 		List<String> listUrlUniversalId = new ArrayList<String>();
-		;
 		RutaJson rutaJson = new RutaJson();
 
-		List<String> listaJson = rutaJson.rutaArchivoJson(); // = rutaJson.devolverListaFiles;
-
-		// String urlServer =
-		// "http://192.168.1.251/DATABASE/BANCOLOMBIA/DESARROLLO/JUBILACION/jubilacion.nsf/agXMLByUnid?Open&unidDB=557362870675F51E0525837C001BA05D&unidDoc=";
+		List<String> listaJson = rutaJson.rutaArchivoJson();
 
 		String universalID;
 		long iContTotalUniversalId = 0;
@@ -39,12 +35,12 @@ public class ListaUrlLotusServer {
 
 				String valueLineString = null;
 				while ((valueLineString = br.readLine()) != null) {
+
 					JSONObject jsonDocument = (JSONObject) new JSONParser().parse(valueLineString.trim());
 					Map<Object, Object> documentObj = mapper.convertValue(jsonDocument, Map.class);
 					universalID = (String) documentObj.get("UniversalID");
+
 					if (universalID != null) {
-						// listUrlUniversalId.add(urlServer+universalID);
-						// System.out.println("Nueva Url" + listUrlUniversalId);
 						iContTotalUniversalId++;
 					} else {
 						iContTotalUniversalId = iContTotalUniversalId;

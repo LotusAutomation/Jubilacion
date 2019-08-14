@@ -11,10 +11,6 @@ public class ValidarVacio {
 	public static String getEstadoNull() {
 		return estado;
 	}
-	/*
-	 * public void setEstadoNull(Boolean estadoNull) { this.estadoNull = estadoNull;
-	 * }
-	 */
 
 	public static void setEstadoNull(String estadoNull) {
 		estado = estadoNull;

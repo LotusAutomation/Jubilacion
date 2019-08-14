@@ -1,84 +1,34 @@
-//usar el plugin de eclipse y java
+version '1.0-SNAPSHOT'
+
 apply plugin: 'java'
-apply plugin: 'eclipse'
-apply plugin: 'java-library'
+apply plugin: 'net.serenity-bdd.aggregator'
 
-/* Para usar el repositorio central de maven */
+sourceCompatibility = 1.8
+
 repositories {
-	 /*  mavenLocal()*/
-	   mavenCentral()
-       jcenter()
+    maven {
+        url 'http://artifactory.bancolombia.corp:80/maven-bancolombia'
+    }
+}
+buildscript {
+    repositories {
+        maven {
+            url 'http://artifactory.bancolombia.corp:80/maven-bancolombia'
+        }
+    }
+    dependencies {
+        classpath("net.serenity-bdd:serenity-gradle-plugin:1.9.14")
+    }
 }
 
-//Indicarle a gradle qué librerías queremos
+ext{
+    serenityCucumberVersion = '1.9.7'
+}
+
 dependencies {
-//------------------dependencias para equipo banco---------------------
-/*
-// https://mvnrepository.com/artifact/net.thucydides/thucydides-core
-compile group: 'net.thucydides', name: 'thucydides-core', version: '0.9.125'
-// https://mvnrepository.com/artifact/org.apache.ant/ant
-compile group: 'org.apache.ant', name: 'ant', version: '1.9.4'
-// https://mvnrepository.com/artifact/org.codehaus.jackson/jackson-mapper-asl
-compile group: 'org.codehaus.jackson', name: 'jackson-mapper-asl', version: '1.9.13'
-// https://mvnrepository.com/artifact/org.codehaus.jackson/jackson-core-asl
-compile group: 'org.codehaus.jackson', name: 'jackson-core-asl', version: '1.9.13'
-// https://mvnrepository.com/artifact/org.codehaus.jackson/org.motechproject.org.codehaus.jackson
-compile group: 'org.codehaus.jackson', name: 'org.motechproject.org.codehaus.jackson', version: '1.9.7'
-// https://mvnrepository.com/artifact/com.googlecode.json-simple/json-simple
-compile group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1'
-// https://mvnrepository.com/artifact/org.json/json
-compile group: 'org.json', name: 'json', version: '20180813'
-// https://mvnrepository.com/artifact/com.googlecode.json-simple/json-simple
-compile group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
-// https://mvnrepository.com/artifact/net.serenity-bdd/serenity-screenplay
-compile group: 'net.serenity-bdd', name: 'serenity-screenplay', version: '2.0.11'
-// https://mvnrepository.com/artifact/net.serenity-bdd/serenity-screenplay-webdriver
-compile group: 'net.serenity-bdd', name: 'serenity-screenplay-webdriver', version: '1.1.36'
-// https://mvnrepository.com/artifact/sax/sax
-compile group: 'sax', name: 'sax', version: '2.0.1'
-// https://mvnrepository.com/artifact/info.cukes/cucumber-java
-compile group: 'info.cukes', name: 'cucumber-java', version: '1.1.1'
-// https://mvnrepository.com/artifact/info.cukes/cucumber-java
-compile group: 'info.cukes', name: 'cucumber-java', version: '1.1.3'
-
-compile group: 'info.cukes', name: 'cucumber-java', version: '1.2.4'
-// https://mvnrepository.com/artifact/net.serenity-bdd/serenity-cucumber
-compile group: 'net.serenity-bdd', name: 'serenity-cucumber', version: '1.9.31'
-// https://mvnrepository.com/artifact/net.thucydides/thucydides-core
-compile group: 'net.thucydides', name: 'thucydides-core', version: '0.9.125'
-compile group: 'net.thucydides', name: 'thucydides-core', version: '0.9.275'
-// https://mvnrepository.com/artifact/com.ibm.icu/icu4j
-compile group: 'com.ibm.icu', name: 'icu4j', version: '3.4.4'
-// https://mvnrepository.com/artifact/com.ibm.icu/icu4j
-compile group: 'com.ibm.icu', name: 'icu4j', version: '4.6.1'
-
-*/
-//------------------dependencias para equipo banco---------------------
-
-//	compile 'net.serenity-bdd:serenity-core:2.0.11'
-  //  compile 'net.serenity-bdd:serenity-junit:2.0.11'
-    compile 'net.serenity-bdd:serenity-cucumber:1.9.19'
-    compile 'net.serenity-bdd:serenity-screenplay:2.0.11'
-	compile 'net.serenity-bdd:serenity-rest-assured:2.0.11'
-    compile 'net.serenity-bdd:serenity-screenplay-webdriver:2.0.11'
-    compile 'net.serenity-bdd.maven.plugins:serenity-maven-plugin:1.2.5-rc.6'
-    compile 'org.apache.maven.plugins:maven-surefire-plugin:2.22.1'
-    
-	compile group: 'net.serenity-bdd', name: 'serenity-core', version:'1.9.9'
-	//compile group: 'net.serenity-bdd', name: 'serenity-cucumber', version:'1.9.15'
-	// https://mvnrepository.com/artifact/net.serenity-bdd/serenity-cucumber
-	compile group: 'net.serenity-bdd', name: 'serenity-cucumber', version: '1.9.19'
-	
-	compile group: 'org.slf4j', name: 'slf4j-simple', version:'1.7.7'
-	compile group: 'junit', name: 'junit', version:'4.12'
-		// This dependency is used internally, and not exposed to consumers on their own compile classpath.
-  	implementation 'com.google.guava:guava:23.0'
-
-    // https://mvnrepository.com/artifact/org.codehaus.jackson/jackson-mapper-asl
-	compile group: 'org.codehaus.jackson', name: 'jackson-mapper-asl', version: '1.9.0'
-	
-    implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
-
-  	// Use JUnit test framework
-  	testImplementation 'junit:junit:4.12'
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    implementation(group: 'co.com.bancolombia.certificacion', name: 'manualtestSerenityBDD', version: '1.0.0')
+    implementation "net.serenity-bdd:serenity-cucumber:$rootProject.ext.serenityCucumberVersion"
 }
+
+gradle.startParameter.continueOnFailure = true

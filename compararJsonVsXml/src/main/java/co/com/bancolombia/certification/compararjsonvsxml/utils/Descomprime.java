@@ -12,10 +12,12 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 public class Descomprime {
+
 	public static int iCantidadZipErrados = 0;
 	public static String sZipErrados = "";
 
 	public static void archivoZip(String ficheroZip, String directorioSalida) throws Exception {
+
 		final int TAM_BUFFER = 4096;
 		byte[] buffer = new byte[TAM_BUFFER];
 
@@ -25,9 +27,12 @@ public class Descomprime {
 			nuevoDirectorio.mkdir();
 			flujo = new ZipInputStream(new BufferedInputStream(new FileInputStream(ficheroZip)));
 			ZipEntry entrada;
+
 			while ((entrada = flujo.getNextEntry()) != null) {
+
 				String nombreSalida = directorioSalida + File.separator + entrada.getName();
 				if (entrada.isDirectory()) {
+
 					File directorio = new File(nombreSalida);
 					directorio.mkdirs();
 				} else {
@@ -36,6 +41,7 @@ public class Descomprime {
 						int leido = 0;
 						salida = new BufferedOutputStream(new FileOutputStream(nombreSalida), TAM_BUFFER);
 						while ((leido = flujo.read(buffer, 0, TAM_BUFFER)) != -1) {
+
 							salida.write(buffer, 0, leido);
 						}
 					} finally {
@@ -77,16 +83,6 @@ public class Descomprime {
 		}
 		return listFiles;
 
-		/*
-		 * FileInputStream fis = null; try { fis = new FileInputStream(
-		 * "C:/Users/QVISION/Documents/Reclamos_3BD/reclamos_10-/reclamos-/63DC2773D80FBC32052576B30066D326.zip"
-		 * ); } catch (FileNotFoundException e1) { // TODO Auto-generated catch block
-		 * e1.printStackTrace(); } ZipInputStream zis = new ZipInputStream(new
-		 * BufferedInputStream(fis)); ZipEntry entry; int i=0; try { while((entry =
-		 * zis.getNextEntry()) != null) { i=i+1; System.out.println(entry);
-		 * System.out.println(i); //read from zis until available } } catch (IOException
-		 * e) { // TODO Auto-generated catch block e.printStackTrace(); }
-		 */
 	}
 
 	public static void archivoGZip(String ficheroGZip, String directorioSalida) throws Exception {
@@ -102,6 +98,7 @@ public class Descomprime {
 
 			String nombreSalida = directorioSalida + File.separator + entrada.getName();
 			if (entrada.isDirectory()) {
+				
 				File directorio = new File(nombreSalida);
 				directorio.mkdirs();
 			} else {
@@ -124,13 +121,5 @@ public class Descomprime {
 
 		}
 
-		/*
-		 * try { FileInputStream fis = new FileInputStream(gzipFile); GZIPInputStream
-		 * gis = new GZIPInputStream(fis); FileOutputStream fos = new
-		 * FileOutputStream(newFile); byte[] buffer = new byte[1024]; int len;
-		 * while((len = gis.read(buffer)) != -1){ fos.write(buffer, 0, len); } //close
-		 * resources fos.close(); gis.close(); } catch (IOException e) {
-		 * e.printStackTrace(); }
-		 */
 	}
 }

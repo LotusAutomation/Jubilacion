@@ -25,7 +25,6 @@ import co.com.bancolombia.certification.compararjsonvsxml.utils.ElementosXml;
 import co.com.bancolombia.certification.compararjsonvsxml.utils.FormatoJson;
 import co.com.bancolombia.certification.compararjsonvsxml.utils.ListaDeFallidos;
 import co.com.bancolombia.certification.compararjsonvsxml.utils.Logs;
-import co.com.bancolombia.certification.compararjsonvsxml.utils.RutaComprimidos;
 import co.com.bancolombia.certification.compararjsonvsxml.utils.RutaJson;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Task;
@@ -33,22 +32,15 @@ import net.serenitybdd.screenplay.Tasks;
 
 public class CompararSoloDataJson implements Task {
 
-//	public static List<String> listUrlUniversalId = new ArrayList<String>();;
-
 	RutaJson rutaJson = new RutaJson();
-	RutaComprimidos rutaComprimidos = new RutaComprimidos();
 	ArchivosComprimidos archivosComprimidos = new ArchivosComprimidos();
-
 	Descomprime descomprime = new Descomprime();
-
-	// private String fileNameJSON;
 	ElementosJson elementosJson = new ElementosJson();
 
 	@Override
 	public <T extends Actor> void performAs(T actor) {
 
-		List<String> listaJson = rutaJson.rutaArchivoJson(); // = rutaJson.devolverListaFiles;
-
+		List<String> listaJson = rutaJson.rutaArchivoJson();
 		Object valueObj;
 		Object valueField;
 		String keyField;
@@ -66,8 +58,6 @@ public class CompararSoloDataJson implements Task {
 		String sLineaSeparadora = "\n" + "============================================================================="
 				+ "\n";
 
-		// String fileNameJSON
-		// ="D:\\Datos_Prueba\\LOTUS_RECLAMOS_RECLAMOS_20190410_036_3.json";
 		for (String fileNameJSON : listaJson) {
 
 			try {
@@ -83,8 +73,10 @@ public class CompararSoloDataJson implements Task {
 						"\\x1d", "\\x1e", "\\x1f" };
 
 				while ((valueLineString = br.readLine()) != null) {
+
 					// Elimna todos los caracteres especiales ASCII que ven gan en el JSON
 					valueLineString = FormatoJson.replaceCharacterSpecialJson(valueLineString, SpecialCharacters);
+
 					// Convierte a un JsonOBject cada línea leída
 					JSONObject jsonDocument = (JSONObject) new JSONParser().parse(valueLineString);
 					Map<Object, Object> documentObj = mapper.convertValue(jsonDocument, Map.class);
@@ -94,6 +86,7 @@ public class CompararSoloDataJson implements Task {
 					Document xmlDoc = ElementosXml.getDocumentByUniversalId(universalID, false);
 
 					if (universalID != null) {
+
 						// listUrlUniversalId.add(URL_SERVER+universalID);
 						iContTotalUniversalId++;
 					} else {
@@ -105,16 +98,22 @@ public class CompararSoloDataJson implements Task {
 						System.out.println("UniversalID: " + universalID);
 
 						for (Map.Entry<Object, Object> field : documentObj.entrySet()) {
+
 							keyField = (String) field.getKey();
 							valueObj = field.getValue();
-							// System.out.println("Key: " + keyField);
+
 							if (valueObj instanceof LinkedHashMap) {
+
 								Map<Object, Object> fieldValue = mapper.convertValue(valueObj, Map.class);
 								valueField = fieldValue.get("value");
+
 								if (valueField instanceof String) {
+
 									valueField = ((String) valueField).trim();
 									elementosJson.readField(universalID, keyField, (String) valueField, xmlDoc, false);
+
 								} else if (valueField instanceof ArrayList) {
+
 									elementosJson.readField(universalID, keyField, (ArrayList) valueField, xmlDoc,
 											false);
 								}
@@ -131,8 +130,6 @@ public class CompararSoloDataJson implements Task {
 			} catch (Exception ex) {
 				Logger.getLogger(ArchivosComprimidos.class.getName()).log(Level.SEVERE, null, ex);
 			}
-			// System.out.println("==============================================================");
-//			System.out.println("Las rutas de los Json es: " + fileNameJSON);
 
 		}
 
@@ -170,7 +167,6 @@ public class CompararSoloDataJson implements Task {
 				} else {
 
 					idInicial = ListaDeFallidos.objetoCampoFallido.get(x).getsUniversaID();
-					// System.out.println(idInicial);
 					sDatosUniversalIdFallidos = ("UniversalId fallido: [ " + idInicial + " ] " + "Campo: [" + " "
 							+ ListaDeFallidos.objetoCampoFallido.get(x).getsNombreCampo() + "],  DatoXML: "
 							+ ListaDeFallidos.objetoCampoFallido.get(x).getsValorCampoXml()

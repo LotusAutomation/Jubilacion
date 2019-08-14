@@ -27,7 +27,6 @@ import co.com.bancolombia.certification.compararjsonvsxml.utils.FormatoJson;
 import co.com.bancolombia.certification.compararjsonvsxml.utils.ListaDeFallidos;
 import co.com.bancolombia.certification.compararjsonvsxml.utils.Logs;
 import co.com.bancolombia.certification.compararjsonvsxml.utils.ReplaceCharacters;
-import co.com.bancolombia.certification.compararjsonvsxml.utils.RutaComprimidos;
 import co.com.bancolombia.certification.compararjsonvsxml.utils.RutaJson;
 import co.com.bancolombia.certification.compararjsonvsxml.utils.ValidarVacio;
 import net.serenitybdd.screenplay.Actor;
@@ -67,12 +66,10 @@ public class CompararJson implements Task {
 	}
 
 	RutaJson rutaJson = new RutaJson();
-	RutaComprimidos rutaComprimidos = new RutaComprimidos();
 	ArchivosComprimidos archivosComprimidos = new ArchivosComprimidos();
 
 	Descomprime descomprime = new Descomprime();
 
-	// private String fileNameJSON;
 	ElementosJson elementosJson = new ElementosJson();
 
 	@Override
@@ -108,8 +105,6 @@ public class CompararJson implements Task {
 		String sLineaSeparadora = "\n" + "============================================================================="
 				+ "\n";
 
-		// String fileNameJSON
-		// ="D:\\Datos_Prueba\\LOTUS_RECLAMOS_RECLAMOS_20190410_036_3.json";
 		for (String fileNameJSON : listaJson) {
 
 			try {
@@ -139,8 +134,6 @@ public class CompararJson implements Task {
 					// convierte el documento el XML encontrado con el universalId Anterior
 					Document xmlDoc = ElementosXml.getDocumentByUniversalId(universalID, false);
 
-//					Document xmlDocHijo = ElementosXmlHijos.getDocumentByUniversalId(universaIDHijo);
-
 					if (universalID != null) {
 						// listUrlUniversalId.add(URL_SERVER+universalID);
 						iContTotalUniversalId++;
@@ -148,14 +141,15 @@ public class CompararJson implements Task {
 						iContTotalUniversalId = iContTotalUniversalId;
 					}
 
+					// Se le asigna el valor de la ruta o dirección del anexo donde se encuentra el
+					// universalID
 					routeFolder = route + universalID;
-					routeFolderHijo = routeHijo + universalID;
-					/*
-					 * descomprime.archivoZip(routeFolder + ".zip", routeFolder); String[]
-					 * filesFolder = archivosComprimidos.getNamesFiles(routeFolder); File directory
-					 * = new File(routeFolder); archivosComprimidos.delete(directory);
-					 */
 
+					// Se le asigna el valor de la ruta o dirección de la carpeta de los XML de los
+					// hijos donde se encuentra el universalID
+					routeFolderHijo = routeHijo + universalID;
+
+					// Descomprime los anexos y los guarda en una lista
 					List<String> nameFilesZip = descomprime.listFilesArchivoZip(routeFolder + ".zip");
 
 					String estadoVacio = "";
@@ -172,35 +166,40 @@ public class CompararJson implements Task {
 							keyField = (String) field.getKey();
 							valueObj = field.getValue();
 
-							// System.out.println("Key: " + keyField);
+							// Si el Universal ID tiene una única etiqueta con una o múltiples líneas
 							if (valueObj instanceof LinkedHashMap) {
 								bTieneHijos = false;
 								Map<Object, Object> fieldValue = mapper.convertValue(valueObj, Map.class);
 								valueField = fieldValue.get("value");
 
+								// Si el Universal ID tiene una única etiqueta con una línea
 								if (valueField instanceof String) {
 
 									valueField = ((String) valueField).trim();
 									elementosJson.readField(universalID, keyField, (String) valueField, xmlDoc,
 											bTieneHijos);
 
+									// Si el Universal ID tiene una única etiqueta con múltiples líneas (es un mismo
+									// texto)
 								} else if (valueField instanceof ArrayList) {
 									elementosJson.readField(universalID, keyField, (ArrayList) valueField, xmlDoc,
 											bTieneHijos);
 								}
+								// Si el Universal ID tiene varias etiquetas con una o múltiples líneas
 							} else if (valueObj instanceof ArrayList) {
 
 								if (!estadoVacio.equals("vacio") && !keyField.equals("hijos")) {
 									// si se entra en esta condición, es porque el ZIP no está vacío y se puede
-									// comparar con el Json
+									// comparar con el Json, Además, no tiene hijos.
 									bAnexoExitoso = (archivosComprimidos.comparateAttachments(
 											(ArrayList<String>) valueObj, (ArrayList<String>) nameFilesZip,
 											routeFolder + ".zip", universalID, keyField));
 									System.out.println("bAnexoExitoso " + bAnexoExitoso);
 								}
 
-								// } if diferente de hijos
+								// Si entra acá, es porque el Json tiene hijos
 								if (keyField.equals("hijos")) {
+
 									ArrayList<Object> objHijo = (ArrayList<Object>) valueObj;
 									bTieneHijos = true;
 									for (int i = 0; i < objHijo.size(); i++) {
@@ -232,12 +231,14 @@ public class CompararJson implements Task {
 
 												// Empieza a comparar los json con los xml
 												if (valueFieldHijo instanceof String) {
+
 													valueField = ((String) valueFieldHijo).trim();
 													elementosJson.readField(universalID + " (" + universalIDHijo + ")",
 															keyFieldHijo, (String) valueFieldHijo, xmlDocHijo,
 															bTieneHijos);
-													// universalID + " (" + universalIDHijo+")"
+
 												} else if (valueFieldHijo instanceof ArrayList) {
+
 													elementosJson.readField(universalID + " (" + universalIDHijo + ")",
 															keyFieldHijo, (ArrayList) valueFieldHijo, xmlDocHijo,
 															bTieneHijos);
@@ -249,6 +250,7 @@ public class CompararJson implements Task {
 							}
 						}
 					} else {
+
 						System.out.println(".::Comparar Json::. EL sgte XML está vacío o no existe: " + universalID);
 						iXmlVacios++;
 						sUniversalDamage = sUniversalDamage + "\n" + universalID;
@@ -260,20 +262,23 @@ public class CompararJson implements Task {
 			} catch (Exception ex) {
 				Logger.getLogger(ArchivosComprimidos.class.getName()).log(Level.SEVERE, null, ex);
 			}
-			// System.out.println("==============================================================");
-			// System.out.println("Las rutas de los Json es: " + fileNameJSON);
-
 		}
 
 		// -------------------Construcción de información---------------------------
+
+		// ---Se llena el archivo ResumenPruebasXXX.log con los resultados de la prueba
+
 		int fallidos = 0;
 
 		sMensajeTotalUniversalId = "El total de Universal Id validados es de [ " + iContTotalUniversalId + " ]";
 		Logs.writeFile(sLineaSeparadora + sMensajeTotalUniversalId + "\n" + sLineaSeparadora);
 
+		// Se reune la información de los UniversalID (PADRES) fallidos (si existen, es
+		// decir, si
+		// la lista de fallidos es mayor a cero)
 		if (ListaDeFallidos.objetoCampoFallido.size() != 0) {
-			fallidos = 1;
 
+			fallidos = 1;
 			String idInicial = ListaDeFallidos.objetoCampoFallido.get(0).getsUniversaID();
 
 			sDatosUniversalIdFallidos = ("UniversalId fallido: [ " + idInicial + " ] " + "Campo: ["
@@ -316,8 +321,14 @@ public class CompararJson implements Task {
 
 		}
 
+		// Se elimina la información que pueda contener la Lista de UniversalId
+		// fallidos, con el fin de que la información no se repita cuando se hacen
+		// varias ejecuciones en una misma prueba
 		ListaDeFallidos.objetoCampoFallido.clear();
 
+		// Se reune la información de los UniversalID (HIJOS) fallidos (si existen, es
+		// decir, si
+		// la lista de fallidos es mayor a cero)
 		if (bTieneHijos) {
 			// ------Escribir en el Log la cantidad de fallidos si tiene hijos------
 
@@ -328,17 +339,16 @@ public class CompararJson implements Task {
 
 			iContUniversalIdExitoso = iContTotalUniversalId - ElementosJson.iContador;
 
-			// ------Escribir en el Log la cantidad de fallidos si tiene hijos------
-
 		} else {
+
 			// --------Escribir en el Log la cantidad de fallidos sin hijos------
 			sCantidadFallidos = sLineaSeparadora + "\n" + "La cantidad de Universal Id Fallidos es de: [ " + fallidos
 					+ " ]" + "\n" + sLineaSeparadora;
+
 			System.out.println(sCantidadFallidos);
 			Logs.writeFile(sCantidadFallidos);
 
 			iContUniversalIdExitoso = iContTotalUniversalId - fallidos;
-			// ------Escribir en el Log la cantidad de fallidos sin hijos-------
 		}
 
 		sMensajeUiversalIdExitosos = sLineaSeparadora + "\n"
@@ -346,7 +356,8 @@ public class CompararJson implements Task {
 				+ sLineaSeparadora;
 		Logs.writeFile(sMensajeUiversalIdExitosos);
 
-		// -------------------Construción de informa---------------------------
+		// ---Información que se muestra por consola-----
+
 		System.out.println("==============================================================");
 		System.out.println("Cantidad de Universal Id validados es: " + iContTotalUniversalId);
 

@@ -21,18 +21,24 @@ import org.xml.sax.SAXException;
 public class ElementosXml {
 
 	public static Document getDocumentByUniversalId(String universalID, boolean hijos) {
+
+		// Elige la ruta correcta para cada caso, la de xmlPadre o xmlHijos
 		String fileNameXML = ((!hijos) ? ReplaceCharacters.of(rutaFileXmls) : ReplaceCharacters.of(rutaFileXmlHijos))
 				+ universalID + ".xml";
+
 		System.out.println("********************************** " + fileNameXML);
+
 		try {
 			// Read XML by document
 			DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
 
 			if (docBuilder.parse(fileNameXML) != null) {
+
 				return docBuilder.parse(fileNameXML);
 			}
 		} catch (IOException | ParserConfigurationException | SAXException e) {
+
 			e.printStackTrace();
 			System.out.println(".::Elementos XML: EL sgte XML está vacío o no existe: " + universalID);
 		}
@@ -51,10 +57,13 @@ public class ElementosXml {
 			XPath xpath = factory.newXPath();
 			String expression = "//*[@name='" + keyField + "']";
 			NodeList itemList = (NodeList) xpath.evaluate(expression, doc, XPathConstants.NODESET);
+
 			if (keyField.equalsIgnoreCase("ok1_1")) {
+
 				System.out.println("itemList ** " + itemList.getLength());
 			}
 			return itemList;
+
 		} catch (XPathExpressionException e) {
 			e.printStackTrace();
 		}
@@ -63,11 +72,17 @@ public class ElementosXml {
 
 	// Eliminar los tags hijos del enviado por parámetro
 	public static void removeAll(Node node, short nodeType, String name) {
+
 		if (node.getNodeType() == nodeType && (name == null || node.getNodeName().equals(name))) {
+
 			node.getParentNode().removeChild(node);
+
 		} else {
+
 			NodeList list = node.getChildNodes();
+
 			for (int i = 0; i < list.getLength(); i++) {
+
 				removeAll(list.item(i), nodeType, name);
 			}
 		}
@@ -76,11 +91,17 @@ public class ElementosXml {
 	public static void removeAllNode(Node node, short nodeType, String[] name) {
 
 		for (int i = 0; i < name.length - 1; i++) {
+
 			if (node.getNodeType() == nodeType && (name[i] == null || node.getNodeName().equals(name[i]))) {
+
 				node.getParentNode().removeChild(node);
+
 			} else {
+
 				NodeList list = node.getChildNodes();
+
 				for (int j = 0; j < list.getLength(); j++) {
+
 					removeAllNode(list.item(j), nodeType, name);
 				}
 			}
