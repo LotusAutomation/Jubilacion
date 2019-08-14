@@ -1,0 +1,57 @@
+//usar el plugin de eclipse y java
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'java-library'
+
+/* Para usar el repositorio central de maven */
+repositories {
+	mavenLocal()
+    mavenCentral()
+    jcenter()
+    /*
+       maven {
+       url "https://artifactory.apps.bancolombia.com/maven-bancolombia/"
+       }*/
+}
+
+buildscript{
+	repositories {
+	mavenLocal()
+    mavenCentral()
+    jcenter()
+    /*
+		maven {
+		       url "https://artifactory.apps.bancolombia.com/maven-bancolombia/"
+		      }*/
+       }
+     dependencies {
+       				classpath "net.serenity-bdd:serenity-gradle-plugin:1.9.9"
+       			}
+	}
+//Indicarle a gradle qué librerías queremos
+dependencies {
+
+//------------------dependencias para equipo banco---------------------
+
+//	compile 'net.serenity-bdd:serenity-core:2.0.11'
+  //  compile 'net.serenity-bdd:serenity-junit:2.0.11'
+    compile 'net.serenity-bdd:serenity-cucumber:1.9.19'
+    compile 'net.serenity-bdd:serenity-screenplay:2.0.11'
+	compile 'net.serenity-bdd:serenity-rest-assured:2.0.11'
+    compile 'net.serenity-bdd:serenity-screenplay-webdriver:2.0.11'
+    compile 'net.serenity-bdd.maven.plugins:serenity-maven-plugin:1.2.5-rc.6'
+    compile 'org.apache.maven.plugins:maven-surefire-plugin:2.22.1'
+    
+	compile group: 'net.serenity-bdd', name: 'serenity-core', version:'1.9.9'
+	//compile group: 'net.serenity-bdd', name: 'serenity-cucumber', version:'1.9.5'
+	compile group: 'org.slf4j', name: 'slf4j-simple', version:'1.7.7'
+	compile group: 'junit', name: 'junit', version:'4.12'
+		// This dependency is used internally, and not exposed to consumers on their own compile classpath.
+  	implementation 'com.google.guava:guava:23.0'
+	
+	compile group: 'org.codehaus.jackson', name: 'jackson-mapper-asl', version: '1.9.0'
+	implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
+
+  	// Use JUnit test framework
+  	testImplementation 'junit:junit:4.12'
+}

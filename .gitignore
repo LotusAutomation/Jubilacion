@@ -1,0 +1,57 @@
+# Clases compiladas
+
+compararJsonVsXml/*.class
+compararJsonVsXml/.*class
+
+# Logs
+
+compararJsonVsXml/*.log
+
+# Archivos comprimidos
+
+compararJsonVsXml/*.war
+compararJsonVsXml/*.nar
+compararJsonVsXml/*.ear
+compararJsonVsXml/*.zip
+compararJsonVsXml/*.tar.gz
+compararJsonVsXml/*.rar
+
+# Reportes serenity
+
+compararJsonVsXml/target/
+
+# Gradle
+
+compararJsonVsXml/.gradle/
+compararJsonVsXml/build/
+
+# No ignorar el Gradle Wrapper
+
+!compararJsonVsXml/gradle\wrapper\gradle-wrapper.jar
+
+# Archivos eclipse
+
+compararJsonVsXml/.classpath
+compararJsonVsXml/.project
+compararJsonVsXml/.metadata
+compararJsonVsXml/bin/
+compararJsonVsXml/tmp/
+compararJsonVsXml/*.tmp
+compararJsonVsXml/*.bak
+compararJsonVsXml/*.swp
+compararJsonVsXml/*~.nib
+compararJsonVsXml/local.properties
+compararJsonVsXml/.settings/
+compararJsonVsXml/.loadpath
+compararJsonVsXml/.recommenders
+compararJsonVsXml/.idea/
+compararJsonVsXml/out/
+
+# Locally stored "Eclipse launch configurations"
+
+compararJsonVsXml/*.launch
+
+### Sonar ###
+#Sonar generated dir
+
+compararJsonVsXml/.sonar/
