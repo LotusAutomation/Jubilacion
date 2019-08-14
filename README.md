@@ -1,6 +1,7 @@
 #Automatización Jubilación Lotus
 
 ###Control de versiones
+
 | Versión | Descripción  | Fecha de implementación del proyecto en los demás IDE |
 | :------------:|:---------------:| :-----:|
 | 1  | Validación para los .ZIP vacíos.  |02/08/2019 |
