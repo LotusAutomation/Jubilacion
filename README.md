@@ -1,6 +1,6 @@
-#Automatización Jubilación Lotus
+# Automatización Jubilación Lotus
 
-###Control de versiones
+### Control de versiones
 
 | Versión | Descripción  | Fecha de implementación del proyecto en los demás IDE |
 | :------------:|:---------------:| :-----:|
