@@ -25,11 +25,6 @@ public class FormatosCampos {
 			valueTemp = valueTemp.replaceAll("\t", "");
 			valueTemp = valueTemp.replaceAll("\n", "");
 			valueTemp = valueTemp.replaceAll("\\\\", "/");
-			valueTemp = valueTemp.replaceAll("..,", ",");
-			valueTemp = valueTemp.replaceAll(".,", ",");
-			valueTemp = valueTemp.replaceAll("..]", "]");
-			valueTemp = valueTemp.replaceAll(".]", "]");
-			valueTemp = valueTemp.replaceAll(" ", "");
 
 		}
 		return valueTemp;
