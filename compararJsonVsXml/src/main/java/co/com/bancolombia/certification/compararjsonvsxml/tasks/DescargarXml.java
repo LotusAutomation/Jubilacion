@@ -14,17 +14,18 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+
 import co.com.bancolombia.certification.compararjsonvsxml.utils.RutaJson;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Task;
 import net.serenitybdd.screenplay.Tasks;
 
-public class DescargarXml implements Task {
-
+public class DescargarXml implements Task{
+	
 	public static List<String> listUrlUniversalId = new ArrayList<String>();;
-
+		
 	RutaJson rutaJson = new RutaJson();
-
+	
 	@Override
 	public <T extends Actor> void performAs(T actor) {
 
@@ -34,7 +35,7 @@ public class DescargarXml implements Task {
 
 		String universalID;
 		Integer iContTotalUniversalId = 0;
-
+		
 		for (String fileNameJSON : listaJson) {
 
 			try {
@@ -51,21 +52,22 @@ public class DescargarXml implements Task {
 					universalID = (String) documentObj.get("UniversalID");
 
 					if (universalID != null) {
-						listUrlUniversalId.add(urlServer + universalID);
+						listUrlUniversalId.add(urlServer+universalID); 
 						iContTotalUniversalId++;
 					} else {
 						iContTotalUniversalId = iContTotalUniversalId;
 					}
-
-				}
-			} catch (IllegalArgumentException | ParseException | IOException e) {
-				e.printStackTrace();
+		
+	}
 			}
+			catch (IllegalArgumentException | ParseException | IOException e) {
+				e.printStackTrace();
+			} 
 		}
 	}
-
+	
 	public static DescargarXml delServidorLotus() {
 		return Tasks.instrumented(DescargarXml.class);
 	}
-
+	
 }

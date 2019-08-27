@@ -16,5 +16,6 @@ public class NombreArchivoJson {
 	public void setsNombreArchivo(String sNombreArchivo) {
 		this.sNombreArchivo = sNombreArchivo;
 	}
-
+	
+	
 }

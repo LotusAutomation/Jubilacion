@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RutaComprimidos {
-
+	
 	public RutaComprimidos() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -29,14 +29,14 @@ public class RutaComprimidos {
 				if (files.endsWith(".zip")) {
 					pathOut = path + files;
 					ListPath.add(pathOut);
-
+					
 					iContador++;
-					// System.out.println(files + " en la ruta " + pathOut);
+				//	System.out.println(files + " en la ruta " + pathOut);
 				}
 			}
 		}
-		// System.out.println("+++++++++++++++++++++++++" +ListPath.size());
-		// System.out.println("En la ruta hay: [" + iContador + "] .Zip " + "Fin" );
+		//System.out.println("+++++++++++++++++++++++++" +ListPath.size());
+		//System.out.println("En la ruta hay: [" + iContador + "] .Zip " + "Fin" );
 		// devolver una lista de archivo List<File>
 		return ListPath;
 	}
