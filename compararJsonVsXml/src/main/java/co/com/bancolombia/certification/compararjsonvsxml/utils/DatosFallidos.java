@@ -3,7 +3,6 @@ package co.com.bancolombia.certification.compararjsonvsxml.utils;
 public class DatosFallidos {
 
 	public DatosFallidos(String sUniversaID, String sNombreCampo, String sValorCampoJson, String sValorCampoXml) {
-		super();
 		this.sUniversaID = sUniversaID;
 		this.sNombreCampo = sNombreCampo;
 		this.sValorCampoJson = sValorCampoJson;
