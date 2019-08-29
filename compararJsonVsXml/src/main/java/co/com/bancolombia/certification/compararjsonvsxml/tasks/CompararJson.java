@@ -73,7 +73,7 @@ public class CompararJson implements Task {
 	@Override
 	public <T extends Actor> void performAs(T actor) {
 
-		List<String> listaJson = rutaJson.rutaArchivoJson(); // = rutaJson.devolverListaFiles;
+		List<String> listaJson = rutaJson.rutaArchivoJson(rutaJsons); // = rutaJson.devolverListaFiles;
 
 		// para rutas compartidas se debe cambiar la variable por la de Anexos
 		String route = ReplaceCharacters.of(rutaFileAnexo);
@@ -130,7 +130,8 @@ public class CompararJson implements Task {
 					// Extrae el valor del UniversalId del Json
 					String universalID = (String) documentObj.get("UniversalID");
 					// convierte el documento el XML encontrado con el universalId Anterior
-					Document xmlDoc = ElementosXml.getDocumentByUniversalId(universalID, false);
+					Document xmlDoc = ElementosXml.getDocumentByUniversalId(universalID, false, rutaFileXml,
+							rutaFileXmlHijo);
 
 					if (universalID != null) {
 						// listUrlUniversalId.add(URL_SERVER+universalID);
@@ -224,8 +225,8 @@ public class CompararJson implements Task {
 
 												// Busca en la ruta donde están los XML del hijo y trae su información
 												// para compararla
-												Document xmlDocHijo = ElementosXml
-														.getDocumentByUniversalId(universalIDHijo, bTieneHijos);
+												Document xmlDocHijo = ElementosXml.getDocumentByUniversalId(
+														universalIDHijo, bTieneHijos, rutaFileXml, rutaFileXmlHijo);
 
 												// Empieza a comparar los json con los xml
 												if (valueFieldHijo instanceof String) {
@@ -264,7 +265,7 @@ public class CompararJson implements Task {
 
 		actor.attemptsTo(Construir.elReporte(sMensajeTotalUniversalId, iContTotalUniversalId, sLineaSeparadora,
 				sDatosUniversalIdFallidos, bTieneHijos, sCantidadFallidos, iContUniversalIdExitoso,
-				sMensajeUiversalIdExitosos, iXmlVacios, sUniversalDamage));
+				sMensajeUiversalIdExitosos, iXmlVacios, sUniversalDamage, rutaFileLogs));
 	}
 
 	public static CompararJson conArchivoXml(String rutaFileXml, String rutaFileAnexo, String rutaFileJson,

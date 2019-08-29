@@ -9,10 +9,6 @@ import org.w3c.dom.NodeList;
 
 public class ElementosJson {
 
-	public ElementosJson() {
-		super();
-	}
-
 	public static final String TYPEDATASIMPLE = "simple";
 	public static final String TYPEDATAMULTILINE = "multiLine";
 	public static final String TYPEDATASIMPLEDATE = "simpleDate";

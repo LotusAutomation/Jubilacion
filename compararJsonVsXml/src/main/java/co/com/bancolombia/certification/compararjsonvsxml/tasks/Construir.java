@@ -20,10 +20,12 @@ public class Construir implements Task {
 	private String sMensajeUiversalIdExitosos;
 	private int iXmlVacios;
 	private String sUniversalDamage;
+	private String rutaFileLogs;
 
 	public Construir(String sMensajeTotalUniversalId, int iContTotalUniversalId, String sLineaSeparadora,
 			String sDatosUniversalIdFallidos, Boolean bTieneHijos, String sCantidadFallidos,
-			int iContUniversalIdExitoso, String sMensajeUiversalIdExitosos, int iXmlVacios, String sUniversalDamage) {
+			int iContUniversalIdExitoso, String sMensajeUiversalIdExitosos, int iXmlVacios, String sUniversalDamage,
+			String rutaFileLogs) {
 		this.sMensajeTotalUniversalId = sMensajeTotalUniversalId;
 		this.iContTotalUniversalId = iContTotalUniversalId;
 		this.sLineaSeparadora = sLineaSeparadora;
@@ -34,6 +36,7 @@ public class Construir implements Task {
 		this.sMensajeUiversalIdExitosos = sMensajeUiversalIdExitosos;
 		this.iXmlVacios = iXmlVacios;
 		this.sUniversalDamage = sUniversalDamage;
+		this.rutaFileLogs = rutaFileLogs;
 	}
 
 	@Override
@@ -46,7 +49,7 @@ public class Construir implements Task {
 		int fallidos = 0;
 
 		sMensajeTotalUniversalId = "El total de Universal Id validados es de [ " + iContTotalUniversalId + " ]";
-		Logs.writeFile(sLineaSeparadora + sMensajeTotalUniversalId + "\n" + sLineaSeparadora);
+		Logs.writeFile(sLineaSeparadora + sMensajeTotalUniversalId + "\n" + sLineaSeparadora, rutaFileLogs);
 
 		// Se reune la información de los UniversalID (PADRES) fallidos (si existen, es
 		// decir, si
@@ -62,7 +65,7 @@ public class Construir implements Task {
 					+ "|  ---ES DIFERENTE DE:---  DatoJson: |"
 					+ ListaDeFallidos.objetoCampoFallido.get(0).getsValorCampoJson());
 
-			Logs.writeFile(sDatosUniversalIdFallidos);
+			Logs.writeFile(sDatosUniversalIdFallidos, rutaFileLogs);
 
 			for (int x = 1; x < ListaDeFallidos.objetoCampoFallido.size(); x++) {
 
@@ -74,7 +77,7 @@ public class Construir implements Task {
 							+ "|  ---ES DIFERENTE DE:---  DatoJson: |"
 							+ ListaDeFallidos.objetoCampoFallido.get(x).getsValorCampoJson());
 
-					Logs.writeFile(sDatosUniversalIdFallidos);
+					Logs.writeFile(sDatosUniversalIdFallidos, rutaFileLogs);
 
 				} else {
 
@@ -88,7 +91,7 @@ public class Construir implements Task {
 
 					fallidos++;
 
-					Logs.writeFile(sDatosUniversalIdFallidos);
+					Logs.writeFile(sDatosUniversalIdFallidos, rutaFileLogs);
 
 				}
 
@@ -110,7 +113,7 @@ public class Construir implements Task {
 			sCantidadFallidos = sLineaSeparadora + "\n" + "La cantidad de Universal Id Fallidos es de: [ "
 					+ ElementosJson.iContador + " ]" + "\n" + sLineaSeparadora;
 			System.out.println(sCantidadFallidos);
-			Logs.writeFile(sCantidadFallidos);
+			Logs.writeFile(sCantidadFallidos, rutaFileLogs);
 
 			iContUniversalIdExitoso = iContTotalUniversalId - ElementosJson.iContador;
 
@@ -121,7 +124,7 @@ public class Construir implements Task {
 					+ " ]" + "\n" + sLineaSeparadora;
 
 			System.out.println(sCantidadFallidos);
-			Logs.writeFile(sCantidadFallidos);
+			Logs.writeFile(sCantidadFallidos, rutaFileLogs);
 
 			iContUniversalIdExitoso = iContTotalUniversalId - fallidos;
 		}
@@ -129,7 +132,7 @@ public class Construir implements Task {
 		sMensajeUiversalIdExitosos = sLineaSeparadora + "\n"
 				+ " La cantidad de Universal Id exitosos validados es de: [ " + iContUniversalIdExitoso + " ] "
 				+ sLineaSeparadora;
-		Logs.writeFile(sMensajeUiversalIdExitosos);
+		Logs.writeFile(sMensajeUiversalIdExitosos, rutaFileLogs);
 
 		// ---Información que se muestra por consola-----
 
@@ -145,15 +148,17 @@ public class Construir implements Task {
 		System.out.println("Cantidad de .ZIP Vacíos o inexistentes: " + Descomprime.iCantidadZipErrados + " \n Son: \n"
 				+ Descomprime.sZipErrados + " \n");
 		System.out.println("==============================================================");
+		System.out.println(sCantidadFallidos);
 
 	}
 
 	public static Construir elReporte(String sMensajeTotalUniversalId, int iContTotalUniversalId,
 			String sLineaSeparadora, String sDatosUniversalIdFallidos, Boolean bTieneHijos, String sCantidadFallidos,
-			int iContUniversalIdExitoso, String sMensajeUiversalIdExitosos, int iXmlVacios, String sUniversalDamage) {
+			int iContUniversalIdExitoso, String sMensajeUiversalIdExitosos, int iXmlVacios, String sUniversalDamage,
+			String rutaFileLogs) {
 		return Tasks.instrumented(Construir.class, sMensajeTotalUniversalId, iContTotalUniversalId, sLineaSeparadora,
 				sDatosUniversalIdFallidos, bTieneHijos, sCantidadFallidos, iContUniversalIdExitoso,
-				sMensajeUiversalIdExitosos, iXmlVacios, sUniversalDamage);
+				sMensajeUiversalIdExitosos, iXmlVacios, sUniversalDamage, rutaFileLogs);
 
 	}
 

@@ -24,7 +24,7 @@ public class Logs {
 
 	}
 
-	public static void writeFile(String contenido) {
+	public static void writeFile(String contenido, String rutaFileLogs) {
 
 		String informacion = contenido;
 		String ruta = ReplaceCharacters.of(rutaFileLogs);

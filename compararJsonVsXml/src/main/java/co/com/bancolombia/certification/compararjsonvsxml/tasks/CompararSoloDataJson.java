@@ -23,8 +23,7 @@ import co.com.bancolombia.certification.compararjsonvsxml.utils.Descomprime;
 import co.com.bancolombia.certification.compararjsonvsxml.utils.ElementosJson;
 import co.com.bancolombia.certification.compararjsonvsxml.utils.ElementosXml;
 import co.com.bancolombia.certification.compararjsonvsxml.utils.FormatoJson;
-import co.com.bancolombia.certification.compararjsonvsxml.utils.ListaDeFallidos;
-import co.com.bancolombia.certification.compararjsonvsxml.utils.Logs;
+import co.com.bancolombia.certification.compararjsonvsxml.utils.ReplaceCharacters;
 import co.com.bancolombia.certification.compararjsonvsxml.utils.RutaJson;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Task;
@@ -37,13 +36,49 @@ public class CompararSoloDataJson implements Task {
 	Descomprime descomprime = new Descomprime();
 	ElementosJson elementosJson = new ElementosJson();
 
+	public String rutaFileXml;
+	public String rutaFileAnexo;
+	public String rutaFileJson;
+	public String rutaFileLog;
+	public String rutaFilePropiedades;
+	public String rutaFileXmlHijo;
+
+	public static String rutaFileXmls;
+	public static String rutaFileAnexos;
+	public static String rutaJsons;
+	public static String rutaFileLogs;
+	public static String rutaFilePropiedadess;
+	public static String rutaFileXmlHijos;
+
+	public CompararSoloDataJson(String rutaFileXml, String rutaFileAnexo, String rutaFileJson, String rutaFileLog,
+			String rutaFilePropiedades, String rutaFileXmlHijo) {
+		this.rutaFileXml = rutaFileXml;
+		this.rutaFileAnexo = rutaFileAnexo;
+		this.rutaFileJson = rutaFileJson;
+		this.rutaFileLog = rutaFileLog;
+		this.rutaFilePropiedades = rutaFilePropiedades;
+		this.rutaFileXmlHijo = rutaFileXmlHijo;
+		rutaFileXmls = rutaFileXml;
+		rutaFileAnexos = rutaFileAnexo;
+		rutaJsons = rutaFileJson;
+		rutaFileLogs = rutaFileLog;
+		rutaFilePropiedadess = rutaFilePropiedades;
+		rutaFileXmlHijos = rutaFileXmlHijo;
+	}
+
 	@Override
 	public <T extends Actor> void performAs(T actor) {
 
-		List<String> listaJson = rutaJson.rutaArchivoJson();
+		List<String> listaJson = rutaJson.rutaArchivoJson(rutaJsons);
+		// para rutas compartidas se debe cambiar la variable por la de Anexos
+		String rutaTxt = ReplaceCharacters.of(rutaFilePropiedades);
+		String routeHijo = ReplaceCharacters.of(rutaFileXmlHijos);
 		Object valueObj;
+		Object valueObjHijo;
 		Object valueField;
+		Object valueFieldHijo;
 		String keyField;
+		String keyFieldHijo;
 
 		// Variables de informe de datos fallidos
 		String sUniversalDamage = "";
@@ -51,6 +86,7 @@ public class CompararSoloDataJson implements Task {
 		String sCantidadFallidos = "";
 		int iContTotalUniversalId = 0;
 		int iContUniversalIdExitoso = 0;
+		boolean bTieneHijos = false;
 		int iXmlVacios = 0;
 		String sValorUniversaID = "";
 		String sMensajeTotalUniversalId = "";
@@ -83,7 +119,8 @@ public class CompararSoloDataJson implements Task {
 
 					// Extrae el valor del UniversalId
 					String universalID = (String) documentObj.get("UniversalID");
-					Document xmlDoc = ElementosXml.getDocumentByUniversalId(universalID, false);
+					Document xmlDoc = ElementosXml.getDocumentByUniversalId(universalID, false, rutaFileXml,
+							rutaFileXmlHijo);
 
 					if (universalID != null) {
 
@@ -103,20 +140,72 @@ public class CompararSoloDataJson implements Task {
 							valueObj = field.getValue();
 
 							if (valueObj instanceof LinkedHashMap) {
-
+								bTieneHijos = false;
 								Map<Object, Object> fieldValue = mapper.convertValue(valueObj, Map.class);
 								valueField = fieldValue.get("value");
 
 								if (valueField instanceof String) {
 
 									valueField = ((String) valueField).trim();
-									elementosJson.readField(universalID, keyField, (String) valueField, xmlDoc, false);
-
+									elementosJson.readField(universalID, keyField, (String) valueField, xmlDoc,
+											bTieneHijos);
+									// Si el Universal ID tiene una única etiqueta con múltiples líneas (es un mismo
+									// texto)
 								} else if (valueField instanceof ArrayList) {
-
 									elementosJson.readField(universalID, keyField, (ArrayList) valueField, xmlDoc,
-											false);
+											bTieneHijos);
 								}
+							} else if (valueObj instanceof ArrayList) {
+								if (keyField.equals("hijos")) {
+
+									ArrayList<Object> objHijo = (ArrayList<Object>) valueObj;
+									bTieneHijos = true;
+									for (int i = 0; i < objHijo.size(); i++) {
+
+										// mapea los objetos o llave valor de la etiqueta hijos
+										Map<Object, Object> documentObjHijo = mapper.convertValue(objHijo.get(i),
+												Map.class);
+										for (Map.Entry<Object, Object> fieldHijo : documentObjHijo.entrySet()) {
+
+											// Se asigna el valor del UniversalID del hijo para después buscar el XML
+											String universalIDHijo = (String) documentObjHijo.get("UniversalID");
+											valueObjHijo = fieldHijo.getValue();
+
+											// Empieza a recorrer la etiqueta hijos y todo su contenido
+											if (valueObjHijo instanceof LinkedHashMap) {
+
+												// mapea los objetos o llave valor de las etiquetas internas de hijos
+												// para empezar a comparar
+												Map<Object, Object> fieldValueHijo = mapper.convertValue(valueObjHijo,
+														Map.class);
+
+												valueFieldHijo = fieldValueHijo.get("value");
+												keyFieldHijo = (String) fieldHijo.getKey();
+
+												// Busca en la ruta donde están los XML del hijo y trae su información
+												// para compararla
+												Document xmlDocHijo = ElementosXml.getDocumentByUniversalId(
+														universalIDHijo, bTieneHijos, rutaFileXml, rutaFileXmlHijo);
+
+												// Empieza a comparar los json con los xml
+												if (valueFieldHijo instanceof String) {
+
+													valueField = ((String) valueFieldHijo).trim();
+													elementosJson.readField(universalID + " (" + universalIDHijo + ")",
+															keyFieldHijo, (String) valueFieldHijo, xmlDocHijo,
+															bTieneHijos);
+
+												} else if (valueFieldHijo instanceof ArrayList) {
+
+													elementosJson.readField(universalID + " (" + universalIDHijo + ")",
+															keyFieldHijo, (ArrayList) valueFieldHijo, xmlDocHijo,
+															bTieneHijos);
+												}
+											}
+										}
+									}
+								}
+
 							}
 						}
 					} else {
@@ -133,82 +222,16 @@ public class CompararSoloDataJson implements Task {
 
 		}
 
-		// -------------------Construción de información---------------------------
-		int fallidos = 0;
-
-		sMensajeTotalUniversalId = "El total de Universal Id validados es de [ " + iContTotalUniversalId + " ]";
-		Logs.writeFile(sLineaSeparadora + sMensajeTotalUniversalId + "\n" + sLineaSeparadora);
-
-		if (ListaDeFallidos.objetoCampoFallido.size() != 0) {
-			fallidos = 1;
-
-			String idInicial = ListaDeFallidos.objetoCampoFallido.get(0).getsUniversaID();
-
-			sDatosUniversalIdFallidos = ("UniversalId fallido: [ " + idInicial + " ] " + "Campo: ["
-					+ ListaDeFallidos.objetoCampoFallido.get(0).getsNombreCampo() + "],  DatoXML: "
-					+ ListaDeFallidos.objetoCampoFallido.get(0).getsValorCampoXml()
-					+ "|  ---ES DIFERENTE DE:---  DatoJson: |"
-					+ ListaDeFallidos.objetoCampoFallido.get(0).getsValorCampoJson());
-
-			Logs.writeFile(sDatosUniversalIdFallidos);
-
-			for (int x = 1; x < ListaDeFallidos.objetoCampoFallido.size(); x++) {
-
-				if (idInicial.equals(ListaDeFallidos.objetoCampoFallido.get(x).getsUniversaID())) {
-
-					sDatosUniversalIdFallidos = ("UniversalId fallido: [ " + idInicial + " ] " + "Campo: ["
-							+ ListaDeFallidos.objetoCampoFallido.get(x).getsNombreCampo() + "],  DatoXML: "
-							+ ListaDeFallidos.objetoCampoFallido.get(x).getsValorCampoXml()
-							+ "|  ---ES DIFERENTE DE:---  DatoJson: |"
-							+ ListaDeFallidos.objetoCampoFallido.get(x).getsValorCampoJson());
-
-					Logs.writeFile(sDatosUniversalIdFallidos);
-
-				} else {
-
-					idInicial = ListaDeFallidos.objetoCampoFallido.get(x).getsUniversaID();
-					sDatosUniversalIdFallidos = ("UniversalId fallido: [ " + idInicial + " ] " + "Campo: [" + " "
-							+ ListaDeFallidos.objetoCampoFallido.get(x).getsNombreCampo() + "],  DatoXML: "
-							+ ListaDeFallidos.objetoCampoFallido.get(x).getsValorCampoXml()
-							+ "|  ---ES DIFERENTE DE:---  DatoJson: |"
-							+ ListaDeFallidos.objetoCampoFallido.get(x).getsValorCampoJson());
-
-					fallidos++;
-
-					Logs.writeFile(sDatosUniversalIdFallidos);
-
-				}
-
-			}
-
-		}
-
-		ListaDeFallidos.objetoCampoFallido.clear();
-		sCantidadFallidos = sLineaSeparadora + "\n" + "La cantidad de Universal Id Fallidos es de: [ " + fallidos + " ]"
-				+ "\n" + sLineaSeparadora;
-		System.out.println(sCantidadFallidos);
-		Logs.writeFile(sCantidadFallidos);
-
-		iContUniversalIdExitoso = iContTotalUniversalId - fallidos;
-
-		sMensajeUiversalIdExitosos = sLineaSeparadora + "\n"
-				+ " La cantidad de Universal Id exitosos validados es de: [ " + iContUniversalIdExitoso + " ] "
-				+ sLineaSeparadora;
-		Logs.writeFile(sMensajeUiversalIdExitosos);
-
-		// -------------------Construción de informa---------------------------
-		System.out.println("==============================================================");
-		System.out.println("Cantidad de Universal Id validados es: " + iContTotalUniversalId);
-
-		System.out.println("==============================================================");
-		System.out.println(
-				"Cantidad de Xml Vacíos o inexistentes: " + iXmlVacios + " \n Son: " + sUniversalDamage + " \n");
-		System.out.println("==============================================================");
+		actor.attemptsTo(Construir.elReporte(sMensajeTotalUniversalId, iContTotalUniversalId, sLineaSeparadora,
+				sDatosUniversalIdFallidos, bTieneHijos, sCantidadFallidos, iContUniversalIdExitoso,
+				sMensajeUiversalIdExitosos, iXmlVacios, sUniversalDamage, rutaFileLogs));
 
 	}
 
-	public static CompararSoloDataJson conArchivoXml() {
-		return Tasks.instrumented(CompararSoloDataJson.class);
+	public static CompararSoloDataJson conArchivoXml(String rutaFileXml, String rutaFileAnexo, String rutaFileJson,
+			String rutaFileLog, String rutaFilePropiedades, String rutaFileXmlHijo) {
+		return Tasks.instrumented(CompararSoloDataJson.class, rutaFileXml, rutaFileAnexo, rutaFileJson, rutaFileLog,
+				rutaFilePropiedades, rutaFileXmlHijo);
 	}
 
 }

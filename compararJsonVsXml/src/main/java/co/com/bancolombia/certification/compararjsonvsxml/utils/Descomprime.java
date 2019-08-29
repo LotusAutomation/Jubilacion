@@ -98,7 +98,7 @@ public class Descomprime {
 
 			String nombreSalida = directorioSalida + File.separator + entrada.getName();
 			if (entrada.isDirectory()) {
-				
+
 				File directorio = new File(nombreSalida);
 				directorio.mkdirs();
 			} else {

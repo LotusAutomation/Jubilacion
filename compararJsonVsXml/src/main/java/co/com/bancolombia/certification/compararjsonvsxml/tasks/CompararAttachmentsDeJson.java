@@ -15,16 +15,12 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import org.w3c.dom.Document;
 
 import co.com.bancolombia.certification.compararjsonvsxml.utils.ArchivosComprimidos;
 import co.com.bancolombia.certification.compararjsonvsxml.utils.Checksum;
 import co.com.bancolombia.certification.compararjsonvsxml.utils.Descomprime;
 import co.com.bancolombia.certification.compararjsonvsxml.utils.ElementosJson;
-import co.com.bancolombia.certification.compararjsonvsxml.utils.ElementosXml;
 import co.com.bancolombia.certification.compararjsonvsxml.utils.FormatoJson;
-import co.com.bancolombia.certification.compararjsonvsxml.utils.ListaDeFallidos;
-import co.com.bancolombia.certification.compararjsonvsxml.utils.Logs;
 import co.com.bancolombia.certification.compararjsonvsxml.utils.ReplaceCharacters;
 import co.com.bancolombia.certification.compararjsonvsxml.utils.RutaJson;
 import net.serenitybdd.screenplay.Actor;
@@ -33,14 +29,19 @@ import net.serenitybdd.screenplay.Tasks;
 
 public class CompararAttachmentsDeJson implements Task {
 
+	public String rutaJsons;
 	public String rutaFileAnexo;
 	public String rutaFilePropiedades;
+	private String rutaFileLogs;
 	public static String rutaFileAnexos;
 	public static String rutaFilePropiedadess;
 
-	public CompararAttachmentsDeJson(String rutaFileAnexo, String rutaFilePropiedades) {
+	public CompararAttachmentsDeJson(String rutaFileAnexo, String rutaFilePropiedades, String rutaJsons,
+			String rutaFileLogs) {
 		this.rutaFileAnexo = rutaFileAnexo;
 		this.rutaFilePropiedades = rutaFilePropiedades;
+		this.rutaFileLogs = rutaFileLogs;
+		this.rutaJsons = rutaJsons;
 		rutaFileAnexos = rutaFileAnexo;
 		rutaFilePropiedadess = rutaFilePropiedades;
 	}
@@ -52,7 +53,7 @@ public class CompararAttachmentsDeJson implements Task {
 
 	@Override
 	public <T extends Actor> void performAs(T actor) {
-		List<String> listaJson = rutaJson.rutaArchivoJson();
+		List<String> listaJson = rutaJson.rutaArchivoJson(rutaJsons);
 		String route = ReplaceCharacters.of(rutaFileAnexos);
 		String rutaTxt = ReplaceCharacters.of(rutaFilePropiedadess);
 		String routeFolder = "";
@@ -98,7 +99,6 @@ public class CompararAttachmentsDeJson implements Task {
 
 					// Extrae el valor del UniversalId
 					String universalID = (String) documentObj.get("UniversalID");
-					Document xmlDoc = ElementosXml.getDocumentByUniversalId(universalID, false);
 
 					if (universalID != null) {
 						iContTotalUniversalId++;
@@ -109,33 +109,32 @@ public class CompararAttachmentsDeJson implements Task {
 					routeFolder = route + universalID;
 					List<String> nameFilesZip = descomprime.listFilesArchivoZip(routeFolder + ".zip");
 
-					if (xmlDoc != null) {
+					System.out.println("UniversalID: " + universalID);
 
-						System.out.println("UniversalID: " + universalID);
+					for (Map.Entry<Object, Object> field : documentObj.entrySet()) {
+						keyField = (String) field.getKey();
+						valueObj = field.getValue();
 
-						for (Map.Entry<Object, Object> field : documentObj.entrySet()) {
-							keyField = (String) field.getKey();
-							valueObj = field.getValue();
-
-							if (valueObj instanceof ArrayList) {
-								try {
-									if (!keyField.equals("hijos")) {
-										bAnexoExitoso = (archivosComprimidos.comparateAttachments(
-												(ArrayList<String>) valueObj, (ArrayList<String>) nameFilesZip,
-												routeFolder + ".zip", universalID, keyField));
-										System.out.println("bAnexoExitoso " + bAnexoExitoso);
-									}
-								} catch (Exception e) {
-									System.out.println(".::ERROR::..archivosComprimidos.comparateAttachments: " + e);
+						if (valueObj instanceof ArrayList) {
+							try {
+								if (!keyField.equals("hijos")) {
+									bAnexoExitoso = (archivosComprimidos.comparateAttachments(
+											(ArrayList<String>) valueObj, (ArrayList<String>) nameFilesZip,
+											routeFolder + ".zip", universalID, keyField));
+									System.out.println("bAnexoExitoso " + bAnexoExitoso);
 								}
+							} catch (Exception e) {
+								System.out.println(".::ERROR::..archivosComprimidos.comparateAttachments: " + e);
 							}
 						}
-					} else {
-						System.out.println(".::Comparar Json::. EL sgte XML está vacío o no existe: " + universalID);
-						iXmlVacios++;
-						sUniversalDamage = sUniversalDamage + "\n" + universalID;
+						{
+							System.out
+									.println(".::Comparar Json::. EL sgte XML está vacío o no existe: " + universalID);
+							iXmlVacios++;
+							sUniversalDamage = sUniversalDamage + "\n" + universalID;
+						}
+						System.gc();
 					}
-					System.gc();
 				}
 			} catch (FileNotFoundException | IllegalArgumentException | ParseException e) {
 				e.printStackTrace();
@@ -144,84 +143,14 @@ public class CompararAttachmentsDeJson implements Task {
 			}
 		}
 
-		// -------------------Construción de información---------------------------
-		int fallidos = 0;
-
-		sMensajeTotalUniversalId = "El total de Universal Id validados es de [ " + iContTotalUniversalId + " ]";
-		Logs.writeFile(sLineaSeparadora + sMensajeTotalUniversalId + "\n" + sLineaSeparadora);
-
-		if (ListaDeFallidos.objetoCampoFallido.size() != 0) {
-			fallidos = 1;
-
-			String idInicial = ListaDeFallidos.objetoCampoFallido.get(0).getsUniversaID();
-
-			sDatosUniversalIdFallidos = ("UniversalId fallido: [ " + idInicial + " ] " + "Campo: ["
-					+ ListaDeFallidos.objetoCampoFallido.get(0).getsNombreCampo() + "],  DatoXML: "
-					+ ListaDeFallidos.objetoCampoFallido.get(0).getsValorCampoXml()
-					+ "|  ---ES DIFERENTE DE:---  DatoJson: |"
-					+ ListaDeFallidos.objetoCampoFallido.get(0).getsValorCampoJson());
-
-			Logs.writeFile(sDatosUniversalIdFallidos);
-
-			for (int x = 1; x < ListaDeFallidos.objetoCampoFallido.size(); x++) {
-
-				if (idInicial.equals(ListaDeFallidos.objetoCampoFallido.get(x).getsUniversaID())) {
-
-					sDatosUniversalIdFallidos = ("UniversalId fallido: [ " + idInicial + " ] " + "Campo: ["
-							+ ListaDeFallidos.objetoCampoFallido.get(x).getsNombreCampo() + "],  DatoXML: "
-							+ ListaDeFallidos.objetoCampoFallido.get(x).getsValorCampoXml()
-							+ "|  ---ES DIFERENTE DE:---  DatoJson: |"
-							+ ListaDeFallidos.objetoCampoFallido.get(x).getsValorCampoJson());
-
-					Logs.writeFile(sDatosUniversalIdFallidos);
-
-				} else {
-
-					idInicial = ListaDeFallidos.objetoCampoFallido.get(x).getsUniversaID();
-					sDatosUniversalIdFallidos = ("UniversalId fallido: [ " + idInicial + " ] " + "Campo: [" + " "
-							+ ListaDeFallidos.objetoCampoFallido.get(x).getsNombreCampo() + "],  DatoXML: "
-							+ ListaDeFallidos.objetoCampoFallido.get(x).getsValorCampoXml()
-							+ "|  ---ES DIFERENTE DE:---  DatoJson: |"
-							+ ListaDeFallidos.objetoCampoFallido.get(x).getsValorCampoJson());
-
-					fallidos++;
-
-					Logs.writeFile(sDatosUniversalIdFallidos);
-
-				}
-
-			}
-
-		}
-
-		sCantidadFallidos = sLineaSeparadora + "\n" + "La cantidad de Universal Id Fallidos es de: [ " + fallidos + " ]"
-				+ "\n" + sLineaSeparadora;
-		System.out.println(sCantidadFallidos);
-		Logs.writeFile(sCantidadFallidos);
-
-		iContUniversalIdExitoso = iContTotalUniversalId - fallidos;
-
-		sMensajeUiversalIdExitosos = sLineaSeparadora + "\n"
-				+ " La cantidad de Universal Id exitosos validados es de: [ " + iContUniversalIdExitoso + " ] "
-				+ sLineaSeparadora;
-		Logs.writeFile(sMensajeUiversalIdExitosos);
-
-		// -------------------Construción de informa---------------------------
-		System.out.println("==============================================================");
-		System.out.println("Cantidad de Universal Id validados es: " + iContTotalUniversalId);
-
-		System.out.println("==============================================================");
-		System.out.println(
-				"Cantidad de Xml Vacíos o inexistentes: " + iXmlVacios + " \n Son: \n" + sUniversalDamage + " \n");
-		System.out.println("==============================================================");
-
-		System.out.println("==============================================================");
-		System.out.println("Cantidad de .ZIP Vacíos o inexistentes: " + Descomprime.iCantidadZipErrados + " \n Son: \n"
-				+ Descomprime.sZipErrados + " \n");
-		System.out.println("==============================================================");
+		actor.attemptsTo(Construir.elReporte(sMensajeTotalUniversalId, iContTotalUniversalId, sLineaSeparadora,
+				sDatosUniversalIdFallidos, false, sCantidadFallidos, iContUniversalIdExitoso,
+				sMensajeUiversalIdExitosos, iXmlVacios, sUniversalDamage, rutaFileLogs));
 	}
 
-	public static CompararAttachmentsDeJson conArchivoXml(String rutaFileAnexo, String rutaFilePropiedades) {
-		return Tasks.instrumented(CompararAttachmentsDeJson.class, rutaFileAnexo, rutaFilePropiedades);
+	public static CompararAttachmentsDeJson conArchivoXml(String rutaFileAnexo, String rutaFilePropiedades,
+			String rutaFileJson, String rutaFileLog) {
+		return Tasks.instrumented(CompararAttachmentsDeJson.class, rutaFileAnexo, rutaFilePropiedades, rutaFileJson,
+				rutaFileLog);
 	}
 }

@@ -1,8 +1,5 @@
 package co.com.bancolombia.certification.compararjsonvsxml.utils;
 
-import static co.com.bancolombia.certification.compararjsonvsxml.tasks.CompararJson.rutaFileXmlHijos;
-import static co.com.bancolombia.certification.compararjsonvsxml.tasks.CompararJson.rutaFileXmls;
-
 import java.io.IOException;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -20,7 +17,8 @@ import org.xml.sax.SAXException;
 
 public class ElementosXml {
 
-	public static Document getDocumentByUniversalId(String universalID, boolean hijos) {
+	public static Document getDocumentByUniversalId(String universalID, boolean hijos, String rutaFileXmls,
+			String rutaFileXmlHijos) {
 
 		// Elige la ruta correcta para cada caso, la de xmlPadre o xmlHijos
 		String fileNameXML = ((!hijos) ? ReplaceCharacters.of(rutaFileXmls) : ReplaceCharacters.of(rutaFileXmlHijos))

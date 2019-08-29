@@ -1,7 +1,5 @@
 package co.com.bancolombia.certification.compararjsonvsxml.utils;
 
-import static co.com.bancolombia.certification.compararjsonvsxml.tasks.CompararJson.rutaJsons;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,10 +12,10 @@ public class RutaJson {
 
 	// devolver una lista de archivo List<File>
 
-	public static List<String> rutaArchivoJson() {
+	public static List<String> rutaArchivoJson(String rutaJsons) {
 
-		// Se asigna el valor de la ruta de los JsonFile y se eliminan las comillas
-		// simples
+		// Se asigna el valor de la ruta de los JsonFile
+		// y se eliminan las comillas simples
 		String path = "";
 		path = ReplaceCharacters.of(rutaJsons);
 
