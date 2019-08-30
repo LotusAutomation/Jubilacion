@@ -1,6 +1,7 @@
 package co.com.bancolombia.certification.compararjsonvsxml.tasks;
 
-import net.serenitybdd.core.Serenity;
+import static net.serenitybdd.core.Serenity.setSessionVariable;
+
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Task;
 import net.serenitybdd.screenplay.Tasks;
@@ -38,17 +39,17 @@ public class Guardar implements Task {
 
 	@Override
 	public <T extends Actor> void performAs(T actor) {
-		Serenity.setSessionVariable("sMensajeTotalUniversalId").to(sMensajeTotalUniversalId);
-		Serenity.setSessionVariable("iContTotalUniversalId").to(iContTotalUniversalId);
-		Serenity.setSessionVariable("sLineaSeparadora").to(sLineaSeparadora);
-		Serenity.setSessionVariable("sDatosUniversalIdFallidos").to(sDatosUniversalIdFallidos);
-		Serenity.setSessionVariable("bTieneHijos").to(bTieneHijos);
-		Serenity.setSessionVariable("sCantidadFallidos").to(sCantidadFallidos);
-		Serenity.setSessionVariable("iContUniversalIdExitoso").to(iContUniversalIdExitoso);
-		Serenity.setSessionVariable("sMensajeUiversalIdExitosos").to(sMensajeUiversalIdExitosos);
-		Serenity.setSessionVariable("iXmlVacios").to(iXmlVacios);
-		Serenity.setSessionVariable("sUniversalDamage").to(sUniversalDamage);
-		Serenity.setSessionVariable("rutaFileLogs").to(rutaFileLogs);
+		setSessionVariable("sMensajeTotalUniversalId").to(sMensajeTotalUniversalId);
+		setSessionVariable("iContTotalUniversalId").to(iContTotalUniversalId);
+		setSessionVariable("sLineaSeparadora").to(sLineaSeparadora);
+		setSessionVariable("sDatosUniversalIdFallidos").to(sDatosUniversalIdFallidos);
+		setSessionVariable("bTieneHijos").to(bTieneHijos);
+		setSessionVariable("sCantidadFallidos").to(sCantidadFallidos);
+		setSessionVariable("iContUniversalIdExitoso").to(iContUniversalIdExitoso);
+		setSessionVariable("sMensajeUiversalIdExitosos").to(sMensajeUiversalIdExitosos);
+		setSessionVariable("iXmlVacios").to(iXmlVacios);
+		setSessionVariable("sUniversalDamage").to(sUniversalDamage);
+		setSessionVariable("rutaFileLogs").to(rutaFileLogs);
 
 	}
 

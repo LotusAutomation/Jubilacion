@@ -33,3 +33,4 @@
 	- Se creó una nueva clase Guardar, que almacena los valores a utilizar en la construcción del reporte.
 	- En las clases de comparación, se llama a la clase Guardar para enviar.
 	- Se agregó la task de construirElReporte en la eqtiqueta @ Then, que recibe como parámetro los valores almacenados en la clase Guardar.
+	- Se eliminó el @ When y se modificó el feature para efectos de lectura.

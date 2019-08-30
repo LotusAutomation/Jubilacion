@@ -1,12 +1,11 @@
-#autor Duvier Martinez Alvarez
-#email dmartinez@qvision.com.co
-Feature: Verificar la igualdad de la data migrada con la esperada.
+#Autor Duvier Martinez Alvarez - Daniel López
+#Email dmartinez@qvision.com.co - dalopez@qvisiom.com.co
+Feature: To verify Json file data is equal to Xml data.
   As user, I want to access to LOTUS database to validate data's migration.
 
   @CompareData
   Scenario Outline: Compare the Lotus information with the data's migration.
-    Given that I consult a Json file on a specific route from <xml>, <anexo>, <json>, <log>, <propiedades>, <xmlHijo>.
-    When I compare the information with the Xml file
+    Given that I compare a Json file on a specific route from <xml>, <anexo>, <json>, <log>, <propiedades>, <xmlHijo> with the Xml file
     Then I should see that there is not message's errors in the log file
 
     Examples: 
