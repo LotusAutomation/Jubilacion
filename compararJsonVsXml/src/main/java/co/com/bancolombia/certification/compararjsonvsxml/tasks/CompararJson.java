@@ -263,9 +263,10 @@ public class CompararJson implements Task {
 			}
 		}
 
-		actor.attemptsTo(Construir.elReporte(sMensajeTotalUniversalId, iContTotalUniversalId, sLineaSeparadora,
+		actor.attemptsTo(Guardar.losValores(sMensajeTotalUniversalId, iContTotalUniversalId, sLineaSeparadora,
 				sDatosUniversalIdFallidos, bTieneHijos, sCantidadFallidos, iContUniversalIdExitoso,
 				sMensajeUiversalIdExitosos, iXmlVacios, sUniversalDamage, rutaFileLogs));
+
 	}
 
 	public static CompararJson conArchivoXml(String rutaFileXml, String rutaFileAnexo, String rutaFileJson,

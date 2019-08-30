@@ -143,7 +143,7 @@ public class CompararAttachmentsDeJson implements Task {
 			}
 		}
 
-		actor.attemptsTo(Construir.elReporte(sMensajeTotalUniversalId, iContTotalUniversalId, sLineaSeparadora,
+		actor.attemptsTo(Guardar.losValores(sMensajeTotalUniversalId, iContTotalUniversalId, sLineaSeparadora,
 				sDatosUniversalIdFallidos, false, sCantidadFallidos, iContUniversalIdExitoso,
 				sMensajeUiversalIdExitosos, iXmlVacios, sUniversalDamage, rutaFileLogs));
 	}
