@@ -6,10 +6,6 @@ import java.util.Arrays;
 
 public class ArchivosComprimidos {
 
-	public ArchivosComprimidos() {
-		super();
-	}
-
 	FormatosCampos formatosCampos = new FormatosCampos();
 
 	public static void delete(File file) {
@@ -32,41 +28,42 @@ public class ArchivosComprimidos {
 	}
 
 	public boolean comparateAttachments(ArrayList<String> filesJSON, ArrayList<String> filesFolder, String filepath,
-			String universalID, String keyField) {
+			String universalID, String keyField, String baseDeDatos) {
 
 		ArrayList<String> arrFilesFolder = new ArrayList<String>();
 		int contJ = 0;
 		int contF = 0;
 		boolean attachmentCheck = false;
 		boolean universalID_PDF_Obligatorio = false;
-        String sValorAttachmentJson, sValorAttachmentXml = "";
+		String sValorAttachmentJson, sValorAttachmentXml = "";
 
-        if (filesJSON.size() > 0) {
-               String listFileJSON[] = null;
-               filesJSON = formatosCampos.originalArray(filesJSON);
-               listFileJSON = new String[filesJSON.size()];
+		if (filesJSON.size() > 0) {
+			String listFileJSON[] = null;
+			filesJSON = formatosCampos.originalArray(filesJSON);
+			listFileJSON = new String[filesJSON.size()];
 
-               for (int j = 0; j < filesJSON.size(); j++) {
-                      contJ++;
-                      filesJSON.set(j, formatosCampos.extractOnlyFileName(filesJSON.get(j)));
-                      
-                      if((filesJSON.get(j).contains(universalID+".pdf")) || (filesJSON.get(j).contains(universalID+".PDF"))) {
-                             universalID_PDF_Obligatorio=true;
-                      }
-                      listFileJSON[j] = filesJSON.get(j);
-                      System.out.println("filesJSON::. " + filesJSON.get(j) + " \n " + contJ);
-               }
-               
-               for (int i = 0; i < filesFolder.size(); i++) {
-                      contF++;
-                      filesFolder.set(i, formatosCampos.extractOnlyFileName(filesFolder.get(i)));
-                      arrFilesFolder.add(filesFolder.get(i));
-                      System.out.println(".::filesFolder::. " + filesFolder.get(i) + " \n " + contF);
-               }
-               
-               
-               attachmentCheck = filesJSON.containsAll(filesFolder)
-                             && arrFilesFolder.containsAll(Arrays.asList(listFileJSON))&& universalID_PDF_Obligatorio==true;
+			for (int j = 0; j < filesJSON.size(); j++) {
+				contJ++;
+				filesJSON.set(j, formatosCampos.extractOnlyFileName(filesJSON.get(j)));
+				if (baseDeDatos.equals("COMEX")) {
+					if ((filesJSON.get(j).contains(universalID + ".pdf"))
+							|| (filesJSON.get(j).contains(universalID + ".PDF"))) {
+						universalID_PDF_Obligatorio = true;
+					}
+				}
+				listFileJSON[j] = filesJSON.get(j);
+				System.out.println("filesJSON::. " + filesJSON.get(j) + " \n " + contJ);
+			}
+
+			for (int i = 0; i < filesFolder.size(); i++) {
+				contF++;
+				filesFolder.set(i, formatosCampos.extractOnlyFileName(filesFolder.get(i)));
+				arrFilesFolder.add(filesFolder.get(i));
+				System.out.println(".::filesFolder::. " + filesFolder.get(i) + " \n " + contF);
+			}
+
+			attachmentCheck = filesJSON.containsAll(filesFolder)
+					&& arrFilesFolder.containsAll(Arrays.asList(listFileJSON)) && universalID_PDF_Obligatorio == true;
 
 		}
 

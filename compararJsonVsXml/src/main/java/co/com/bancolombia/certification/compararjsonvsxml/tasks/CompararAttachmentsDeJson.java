@@ -33,15 +33,17 @@ public class CompararAttachmentsDeJson implements Task {
 	public String rutaFileAnexo;
 	public String rutaFilePropiedades;
 	private String rutaFileLogs;
+	private String baseDeDatos;
 	public static String rutaFileAnexos;
 	public static String rutaFilePropiedadess;
 
 	public CompararAttachmentsDeJson(String rutaFileAnexo, String rutaFilePropiedades, String rutaJsons,
-			String rutaFileLogs) {
+			String rutaFileLogs, String baseDeDatos) {
 		this.rutaFileAnexo = rutaFileAnexo;
 		this.rutaFilePropiedades = rutaFilePropiedades;
 		this.rutaFileLogs = rutaFileLogs;
 		this.rutaJsons = rutaJsons;
+		this.baseDeDatos = baseDeDatos;
 		rutaFileAnexos = rutaFileAnexo;
 		rutaFilePropiedadess = rutaFilePropiedades;
 	}
@@ -120,7 +122,7 @@ public class CompararAttachmentsDeJson implements Task {
 								if (!keyField.equals("hijos")) {
 									bAnexoExitoso = (archivosComprimidos.comparateAttachments(
 											(ArrayList<String>) valueObj, (ArrayList<String>) nameFilesZip,
-											routeFolder + ".zip", universalID, keyField));
+											routeFolder + ".zip", universalID, keyField, baseDeDatos));
 									System.out.println("bAnexoExitoso " + bAnexoExitoso);
 								}
 							} catch (Exception e) {
@@ -149,8 +151,8 @@ public class CompararAttachmentsDeJson implements Task {
 	}
 
 	public static CompararAttachmentsDeJson conArchivoXml(String rutaFileAnexo, String rutaFilePropiedades,
-			String rutaFileJson, String rutaFileLog) {
+			String rutaFileJson, String rutaFileLog, String baseDeDatos) {
 		return Tasks.instrumented(CompararAttachmentsDeJson.class, rutaFileAnexo, rutaFilePropiedades, rutaFileJson,
-				rutaFileLog);
+				rutaFileLog, baseDeDatos);
 	}
 }

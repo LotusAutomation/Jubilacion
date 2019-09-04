@@ -64,61 +64,57 @@ public class ElementosJson {
 					// Validate numberlist, textlist, datetimelist
 					Node node = (Node) firstItemElement.getFirstChild();
 					NodeList nodesValues = (NodeList) node.getChildNodes();
-							if (nodeType.equalsIgnoreCase(datetimelist)) {
-								String resultado="";
-								for (int j = 0; j < nodesValues.getLength(); j++) {
-									valueField = ((String) valueFieldJSON.get(j)).trim();
-									System.out.println("Valor FOR valueField: " +valueField);
-									
-									Element firstTextElement = (Element) nodesValues.item(j);
-									System.out.println("Valor FOR firstTextElement: " +firstTextElement);
-									
-									boolean time = readJSONFile.findTime(firstTextElement);
-									System.out.println("time ::." + time);
-									String nodeTypeAlgo = firstTextElement.getNodeName() ;
-										
-										//Validación de los tags contenidos en la etiqueta datetimepair
-										if(nodeTypeAlgo.equalsIgnoreCase(datetimepair)) {
-											System.out.println("if dateTimePair");
-											
-											node = (Node) firstTextElement.getFirstChild();
-											nodesValues = (NodeList) node.getChildNodes();
-											
-											for (int k = 0; j < nodesValues.getLength(); k++) {
-												valueField = ((String) valueFieldJSON.get(k)).trim();
-												System.out.println("Valor primera valueField: " +valueField);
-												
-												firstTextElement = (Element) nodesValues.item(k);
-												
-												time = readJSONFile.findTime(firstTextElement);
-												System.out.println("time dateTimePair::." + time);
-												
-												valueField = readJSONFile.formatosCampos.formatDate(valueField, time, false);
-												System.out.println("Valor segunda valueField: " +valueField);
-												
-												Element firstTextElementPair = (Element) nodesValues.item(j);
-												
-												resultado = (readJSONFile.getValueItem(firstTextElement, valueField, TYPEDATASIMPLE));
-												System.out.println("Valor resultado: " +resultado);
-											}
-											
-											//for(int k = 0; k <nodesValues.getLength(); k++) {
-												
-												
-											//}
-											
-										}
-									// Escribir en la lista de fallidos,que después irá a ResumenPruebasXXX.log
-									if (resultado != "" && esHijo == true) {
-		
-										ListaDeFallidos.validarFallidos(resultado, universalID, keyField + " HIJO ", valueField,
-												true);
-									} else if (resultado != "" && esHijo == false) {
-		
-										ListaDeFallidos.validarFallidos(resultado, universalID, keyField, valueField, false);
-									}
+					if (nodeType.equalsIgnoreCase(datetimelist)) {
+						String resultado = "";
+						for (int j = 0; j < nodesValues.getLength(); j++) {
+							valueField = ((String) valueFieldJSON.get(j)).trim();
+							System.out.println("Valor FOR valueField: " + valueField);
+
+							Element firstTextElement = (Element) nodesValues.item(j);
+							System.out.println("Valor FOR firstTextElement: " + firstTextElement);
+
+							boolean time = readJSONFile.findTime(firstTextElement);
+							System.out.println("time ::." + time);
+							String nodeTypeAlgo = firstTextElement.getNodeName();
+
+							// Validación de los tags contenidos en la etiqueta datetimepair
+							if (nodeTypeAlgo.equalsIgnoreCase(datetimepair)) {
+								System.out.println("if dateTimePair");
+
+								node = (Node) firstTextElement.getFirstChild();
+								nodesValues = (NodeList) node.getChildNodes();
+
+								for (int k = 0; j < nodesValues.getLength(); k++) {
+									valueField = ((String) valueFieldJSON.get(k)).trim();
+									System.out.println("Valor primera valueField: " + valueField);
+
+									firstTextElement = (Element) nodesValues.item(k);
+
+									time = readJSONFile.findTime(firstTextElement);
+									System.out.println("time dateTimePair::." + time);
+
+									valueField = readJSONFile.formatosCampos.formatDate(valueField, time, false);
+									System.out.println("Valor segunda valueField: " + valueField);
+
+									Element firstTextElementPair = (Element) nodesValues.item(j);
+
+									resultado = (readJSONFile.getValueItem(firstTextElement, valueField,
+											TYPEDATASIMPLE));
+									System.out.println("Valor resultado: " + resultado);
 								}
-							} else {
+
+							}
+							// Escribir en la lista de fallidos,que después irá a ResumenPruebasXXX.log
+							if (resultado != "" && esHijo == true) {
+
+								ListaDeFallidos.validarFallidos(resultado, universalID, keyField + " HIJO ", valueField,
+										true);
+							} else if (resultado != "" && esHijo == false) {
+
+								ListaDeFallidos.validarFallidos(resultado, universalID, keyField, valueField, false);
+							}
+						}
+					} else {
 						if (valueFieldJSON.size() > 0) {
 
 							if (nodesValues.getLength() != valueFieldJSON.size()) {
@@ -170,7 +166,7 @@ public class ElementosJson {
 		try {
 			for (int i = 0; i < itemList.getLength(); i++) {
 
-				Element firstItemElement = (Element) itemList.item(i);//ACA**************************
+				Element firstItemElement = (Element) itemList.item(i);// ACA**************************
 				String nodeType = firstItemElement.getFirstChild().getNodeName();
 				NodeList textFNList = firstItemElement.getElementsByTagName(nodeType);
 
@@ -178,34 +174,34 @@ public class ElementosJson {
 					if (keyField.equalsIgnoreCase("ok1_1")) {
 						System.out.println("Estoy dentro del OriginalModTime...");
 					}
-						Element firstTextElement = (Element) textFNList.item(0);
-						valueField = readJSONFile.formatosCampos
-								.formatText(firstTextElement.getFirstChild().getNodeValue().trim());
-						valueField = readJSONFile.formatosCampos.formatDateString(valueField);
-	
-						// Escribir en la lista de fallidos,que después irá a ResumenPruebasXXX.log
-						if (valueField != "" && valueField != null && esHijo == true) {
-	
-							ListaDeFallidos.validarFallidos(valueField, universalID, keyField + " ES HIJO ", valueFieldJSON,
-									true);
-						} else if (valueField != "" && valueField != null && esHijo == false) {
-							ListaDeFallidos.validarFallidos(valueField, universalID, keyField, valueFieldJSON, false);
-						}
+					Element firstTextElement = (Element) textFNList.item(0);
+					valueField = readJSONFile.formatosCampos
+							.formatText(firstTextElement.getFirstChild().getNodeValue().trim());
+					valueField = readJSONFile.formatosCampos.formatDateString(valueField);
+
+					// Escribir en la lista de fallidos,que después irá a ResumenPruebasXXX.log
+					if (valueField != "" && valueField != null && esHijo == true) {
+
+						ListaDeFallidos.validarFallidos(valueField, universalID, keyField + " ES HIJO ", valueFieldJSON,
+								true);
+					} else if (valueField != "" && valueField != null && esHijo == false) {
+						ListaDeFallidos.validarFallidos(valueField, universalID, keyField, valueFieldJSON, false);
+					}
 
 				} else if (nodeType.equalsIgnoreCase(richtext)) {
 					if (keyField.equalsIgnoreCase("ok1_1")) {
 						System.out.println("Estoy dentro del richtext...");
 					}
-						Element firstTextElement = (Element) textFNList.item(0);
-						String resultado = (readJSONFile.getValueItem(firstTextElement, valueFieldJSON, TYPEDATAMULTILINE));
-						// Escribir en la lista de fallidos,que después irá a ResumenPruebasXXX.log
-	
-						if (resultado != "" && resultado != null && esHijo == true) {
-							ListaDeFallidos.validarFallidos(resultado, universalID, keyField + " ES HIJO ", valueFieldJSON,
-									true);
-							} else if (resultado != "" && resultado != null && esHijo == false) {
-								ListaDeFallidos.validarFallidos(resultado, universalID, keyField, valueFieldJSON, false);
-							}
+					Element firstTextElement = (Element) textFNList.item(0);
+					String resultado = (readJSONFile.getValueItem(firstTextElement, valueFieldJSON, TYPEDATAMULTILINE));
+					// Escribir en la lista de fallidos,que después irá a ResumenPruebasXXX.log
+
+					if (resultado != "" && resultado != null && esHijo == true) {
+						ListaDeFallidos.validarFallidos(resultado, universalID, keyField + " ES HIJO ", valueFieldJSON,
+								true);
+					} else if (resultado != "" && resultado != null && esHijo == false) {
+						ListaDeFallidos.validarFallidos(resultado, universalID, keyField, valueFieldJSON, false);
+					}
 
 				} else {
 

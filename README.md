@@ -10,6 +10,7 @@
 | 4  | Replicación de los cambios hechos en compararJson (Hijos y en su reporte), en las demás clases de comparación.  |29/08/2019 |
 | 5  | Segregación de la construcción del reporte (ya está en el @ Then) que estaba inmerso en las clases de comparación. |30/08/2019 |
 | 6  | Se agregó validación de tag "*datatimepar*" para fechas en "*datetimelist*", además se implementó validación obligatoria de "**universalId.PDF**" para base de datos de COMEX.|03/09/2019|
+| 7  | Se agregó un parámetro (*baseDeDatos*) en la clase *ArchivosComprimidos.comparateAttachments* que me indica si debo incluir la validación obligatoria de "**universalId.PDF**" para la base de datos de COMEX.|04/09/2019|
 
 - **Versión 1**
 	- Se agregó el ajuste para que cuando los .ZIP estén vacíos, no se comparen con los archivos Json.
@@ -40,3 +41,6 @@
 	- Se realizó modificación deL método "***readField***"(para arrayList) perteneciente a la clase ElementosJson y se agregó validación de etiqueta "*datetimepair*" incluidas en "*datimelist*" de bases de datos COMEX.
 	- Se realizó modificación del método "***comparateAttachments***" perteneciente a la clase ArchivosComprimidos, en dónde se agregó la validación que busca el archivo "**UniversalID.PDF**" en el campo attachment del Json dónde se debe encontrar obligatoriamente para las bases de datos de COMEX.
 	
+- **Versión 7**
+	- Se agregó un parámetro (*String baseDeDatos*) en la clase *ArchivosComprimidos.comparateAttachments* que me indica si debo incluir la validación obligatoria de "**universalId.PDF**" para la base de datos de COMEX.
+	- Se modificaron las clases que llamaban la clase *ArchivosComprimidos.comparateAttachments*.

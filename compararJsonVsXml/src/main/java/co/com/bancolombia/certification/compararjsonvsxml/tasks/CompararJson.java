@@ -39,6 +39,7 @@ public class CompararJson implements Task {
 	public String rutaFileLog;
 	public String rutaFilePropiedades;
 	public String rutaFileXmlHijo;
+	private String baseDeDatos;
 
 	public static String rutaFileXmls;
 	public static String rutaFileAnexos;
@@ -48,13 +49,14 @@ public class CompararJson implements Task {
 	public static String rutaFileXmlHijos;
 
 	public CompararJson(String rutaFileXml, String rutaFileAnexo, String rutaFileJson, String rutaFileLog,
-			String rutaFilePropiedades, String rutaFileXmlHijo) {
+			String rutaFilePropiedades, String rutaFileXmlHijo, String baseDeDatos) {
 		this.rutaFileXml = rutaFileXml;
 		this.rutaFileAnexo = rutaFileAnexo;
 		this.rutaFileJson = rutaFileJson;
 		this.rutaFileLog = rutaFileLog;
 		this.rutaFilePropiedades = rutaFilePropiedades;
 		this.rutaFileXmlHijo = rutaFileXmlHijo;
+		this.baseDeDatos = baseDeDatos;
 		rutaFileXmls = rutaFileXml;
 		rutaFileAnexos = rutaFileAnexo;
 		rutaJsons = rutaFileJson;
@@ -164,7 +166,7 @@ public class CompararJson implements Task {
 						for (Map.Entry<Object, Object> field : documentObj.entrySet()) {
 							keyField = (String) field.getKey();
 							valueObj = field.getValue();
-						
+
 							// Si el Universal ID tiene una única etiqueta con una o múltiples líneas
 							if (valueObj instanceof LinkedHashMap) {
 								bTieneHijos = false;
@@ -192,7 +194,7 @@ public class CompararJson implements Task {
 									// comparar con el Json, Además, no tiene hijos.
 									bAnexoExitoso = (archivosComprimidos.comparateAttachments(
 											(ArrayList<String>) valueObj, (ArrayList<String>) nameFilesZip,
-											routeFolder + ".zip", universalID, keyField));
+											routeFolder + ".zip", universalID, keyField, baseDeDatos));
 									System.out.println("bAnexoExitoso " + bAnexoExitoso);
 								}
 
@@ -225,17 +227,22 @@ public class CompararJson implements Task {
 
 												// Busca en la ruta donde están los XML del hijo y trae su información
 												// para compararla
-												Document xmlDocHijo = ElementosXml.getDocumentByUniversalId(universalIDHijo, bTieneHijos, rutaFileXml, rutaFileXmlHijo);
+												Document xmlDocHijo = ElementosXml.getDocumentByUniversalId(
+														universalIDHijo, bTieneHijos, rutaFileXml, rutaFileXmlHijo);
 
 												// Empieza a comparar los json con los xml
 												if (valueFieldHijo instanceof String) {
 
 													valueField = ((String) valueFieldHijo).trim();
-													elementosJson.readField(universalID + " (" + universalIDHijo + ")",	keyFieldHijo, (String) valueFieldHijo, xmlDocHijo,bTieneHijos);
+													elementosJson.readField(universalID + " (" + universalIDHijo + ")",
+															keyFieldHijo, (String) valueFieldHijo, xmlDocHijo,
+															bTieneHijos);
 
 												} else if (valueFieldHijo instanceof ArrayList) {
 
-													elementosJson.readField(universalID + " (" + universalIDHijo + ")", keyFieldHijo, (ArrayList) valueFieldHijo, xmlDocHijo,bTieneHijos);
+													elementosJson.readField(universalID + " (" + universalIDHijo + ")",
+															keyFieldHijo, (ArrayList) valueFieldHijo, xmlDocHijo,
+															bTieneHijos);
 												}
 											}
 										}
@@ -265,9 +272,9 @@ public class CompararJson implements Task {
 	}
 
 	public static CompararJson conArchivoXml(String rutaFileXml, String rutaFileAnexo, String rutaFileJson,
-			String rutaFileLog, String rutaFilePropiedades, String rutaFileXmlHijo) {
+			String rutaFileLog, String rutaFilePropiedades, String rutaFileXmlHijo, String baseDeDatos) {
 		return Tasks.instrumented(CompararJson.class, rutaFileXml, rutaFileAnexo, rutaFileJson, rutaFileLog,
-				rutaFilePropiedades, rutaFileXmlHijo);
+				rutaFilePropiedades, rutaFileXmlHijo, baseDeDatos);
 	}
 
 }
