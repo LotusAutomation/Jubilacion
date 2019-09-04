@@ -9,5 +9,6 @@ Feature: To verify Json file data is equal to Xml data.
     Then I should see that there is not message's errors in the log file
 
     Examples: 
-      | xml                                         | anexo                                    | json                                     | log                                                     | propiedades                                                          | xmlHijo                                            |
-      | 'H:\\XMLRECLASIFICADOS\\reclasificados_1\\' | 'H:\\RECLASIFICADOS\\reclasificados_1\\' | 'H:\\RECLASIFICADOS\\reclasificados_1\\' | 'H:/XMLRECLASIFICADOS/ResumenPruebasReclasificados.log' | 'H:\\RECLASIFICADOS\\reclasificados_1\\propiedades_lotus_anexos.txt' | 'H:\\XMLRECLASIFICADOS\\reclasificados_1\\HIJOS\\' |
+      | xml                                         | anexo                                    | json                                     | log                                                    | propiedades                                                          | xmlHijo                                            |
+#      | 'F:\\XMLCOMEX\\comex_2\\'                   | 'H:\\RECLASIFICADOS\\reclasificados_1\\' | 'F:\\COMEX\\comex_2\\'                   | 'F:/COMEX/comex_2/ResumenPruebasComex.log'             | 'F:\\COMEX\\comex_2\\propiedades_lotus_anexos.txt'                   | 'H:\\XMLRECLASIFICADOS\\reclasificados_1\\HIJOS\\' |
+      | 'G:\\XMLRECLASIFICADOS\\reclasificados_1\\' | 'G:\\RECLASIFICADOS\\reclasificados_1\\' | 'G:\\RECLASIFICADOS\\reclasificados_1\\' | 'G:/XMLRECLASIFICADOS/ResumenPruebasReclasificados.log | 'G:\\RECLASIFICADOS\\reclasificados_1\\propiedades_lotus_anexos.txt' | 'G:\\XMLRECLASIFICADOS\\reclasificados_1\\HIJOS\\' |

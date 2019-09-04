@@ -164,7 +164,7 @@ public class CompararJson implements Task {
 						for (Map.Entry<Object, Object> field : documentObj.entrySet()) {
 							keyField = (String) field.getKey();
 							valueObj = field.getValue();
-
+						
 							// Si el Universal ID tiene una única etiqueta con una o múltiples líneas
 							if (valueObj instanceof LinkedHashMap) {
 								bTieneHijos = false;
@@ -225,22 +225,17 @@ public class CompararJson implements Task {
 
 												// Busca en la ruta donde están los XML del hijo y trae su información
 												// para compararla
-												Document xmlDocHijo = ElementosXml.getDocumentByUniversalId(
-														universalIDHijo, bTieneHijos, rutaFileXml, rutaFileXmlHijo);
+												Document xmlDocHijo = ElementosXml.getDocumentByUniversalId(universalIDHijo, bTieneHijos, rutaFileXml, rutaFileXmlHijo);
 
 												// Empieza a comparar los json con los xml
 												if (valueFieldHijo instanceof String) {
 
 													valueField = ((String) valueFieldHijo).trim();
-													elementosJson.readField(universalID + " (" + universalIDHijo + ")",
-															keyFieldHijo, (String) valueFieldHijo, xmlDocHijo,
-															bTieneHijos);
+													elementosJson.readField(universalID + " (" + universalIDHijo + ")",	keyFieldHijo, (String) valueFieldHijo, xmlDocHijo,bTieneHijos);
 
 												} else if (valueFieldHijo instanceof ArrayList) {
 
-													elementosJson.readField(universalID + " (" + universalIDHijo + ")",
-															keyFieldHijo, (ArrayList) valueFieldHijo, xmlDocHijo,
-															bTieneHijos);
+													elementosJson.readField(universalID + " (" + universalIDHijo + ")", keyFieldHijo, (ArrayList) valueFieldHijo, xmlDocHijo,bTieneHijos);
 												}
 											}
 										}

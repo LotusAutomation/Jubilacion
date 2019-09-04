@@ -107,7 +107,7 @@ public class FormatosCampos {
 			originalFormat = new SimpleDateFormat("dd/MM/yyyy");
 		}
 		if (!isXML || time) {
-			// originalFormat = new SimpleDateFormat("yyyyMMdd");
+			//originalFormat = new SimpleDateFormat("yyyyMMdd");
 			newFormat = new SimpleDateFormat("dd/MM/yyyy");
 		}
 

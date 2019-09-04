@@ -38,28 +38,35 @@ public class ArchivosComprimidos {
 		int contJ = 0;
 		int contF = 0;
 		boolean attachmentCheck = false;
-		String sValorAttachmentJson, sValorAttachmentXml = "";
+		boolean universalID_PDF_Obligatorio = false;
+        String sValorAttachmentJson, sValorAttachmentXml = "";
 
-		if (filesJSON.size() > 0) {
-			String listFileJSON[] = null;
-			filesJSON = formatosCampos.originalArray(filesJSON);
-			listFileJSON = new String[filesJSON.size()];
+        if (filesJSON.size() > 0) {
+               String listFileJSON[] = null;
+               filesJSON = formatosCampos.originalArray(filesJSON);
+               listFileJSON = new String[filesJSON.size()];
 
-			for (int j = 0; j < filesJSON.size(); j++) {
-				contJ++;
-				filesJSON.set(j, formatosCampos.extractOnlyFileName(filesJSON.get(j)));
-				listFileJSON[j] = filesJSON.get(j);
-				System.out.println("filesJSON::. " + filesJSON.get(j) + " \n " + contJ);
-			}
-
-			for (int i = 0; i < filesFolder.size(); i++) {
-				contF++;
-				filesFolder.set(i, formatosCampos.extractOnlyFileName(filesFolder.get(i)));
-				arrFilesFolder.add(filesFolder.get(i));
-				System.out.println(".::filesFolder::. " + filesFolder.get(i) + " \n " + contF);
-			}
-			attachmentCheck = filesJSON.containsAll(filesFolder)
-					&& arrFilesFolder.containsAll(Arrays.asList(listFileJSON));
+               for (int j = 0; j < filesJSON.size(); j++) {
+                      contJ++;
+                      filesJSON.set(j, formatosCampos.extractOnlyFileName(filesJSON.get(j)));
+                      
+                      if((filesJSON.get(j).contains(universalID+".pdf")) || (filesJSON.get(j).contains(universalID+".PDF"))) {
+                             universalID_PDF_Obligatorio=true;
+                      }
+                      listFileJSON[j] = filesJSON.get(j);
+                      System.out.println("filesJSON::. " + filesJSON.get(j) + " \n " + contJ);
+               }
+               
+               for (int i = 0; i < filesFolder.size(); i++) {
+                      contF++;
+                      filesFolder.set(i, formatosCampos.extractOnlyFileName(filesFolder.get(i)));
+                      arrFilesFolder.add(filesFolder.get(i));
+                      System.out.println(".::filesFolder::. " + filesFolder.get(i) + " \n " + contF);
+               }
+               
+               
+               attachmentCheck = filesJSON.containsAll(filesFolder)
+                             && arrFilesFolder.containsAll(Arrays.asList(listFileJSON))&& universalID_PDF_Obligatorio==true;
 
 		}
 
