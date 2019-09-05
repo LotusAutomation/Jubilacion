@@ -68,39 +68,32 @@ public class ElementosJson {
 						String resultado = "";
 						for (int j = 0; j < nodesValues.getLength(); j++) {
 							valueField = ((String) valueFieldJSON.get(j)).trim();
-							System.out.println("Valor FOR valueField: " + valueField);
 
 							Element firstTextElement = (Element) nodesValues.item(j);
-							System.out.println("Valor FOR firstTextElement: " + firstTextElement);
 
 							boolean time = readJSONFile.findTime(firstTextElement);
-							System.out.println("time ::." + time);
 							String nodeTypeAlgo = firstTextElement.getNodeName();
 
 							// Validación de los tags contenidos en la etiqueta datetimepair
 							if (nodeTypeAlgo.equalsIgnoreCase(datetimepair)) {
-								System.out.println("if dateTimePair");
+
+								// Cuando es datetimePair, lo que se hace es tratar la etiqueta en que estamos
+								// como una lista con comportamiento similar a cuando entra en el if
+								// nodeType.equalsIgnoreCase(datetimelist), pero dentro de esa misma, ya que su
+								// comportamiento es el mismo
 
 								node = (Node) firstTextElement.getFirstChild();
 								nodesValues = (NodeList) node.getChildNodes();
 
 								for (int k = 0; j < nodesValues.getLength(); k++) {
 									valueField = ((String) valueFieldJSON.get(k)).trim();
-									System.out.println("Valor primera valueField: " + valueField);
-
 									firstTextElement = (Element) nodesValues.item(k);
-
 									time = readJSONFile.findTime(firstTextElement);
-									System.out.println("time dateTimePair::." + time);
-
 									valueField = readJSONFile.formatosCampos.formatDate(valueField, time, false);
-									System.out.println("Valor segunda valueField: " + valueField);
-
 									Element firstTextElementPair = (Element) nodesValues.item(j);
 
 									resultado = (readJSONFile.getValueItem(firstTextElement, valueField,
 											TYPEDATASIMPLE));
-									System.out.println("Valor resultado: " + resultado);
 								}
 
 							}

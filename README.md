@@ -44,3 +44,4 @@
 - **Versión 7**
 	- Se agregó un parámetro (*String baseDeDatos*) en la clase *ArchivosComprimidos.comparateAttachments* que me indica si debo incluir la validación obligatoria de "**universalId.PDF**" para la base de datos de COMEX.
 	- Se modificaron las clases que llamaban la clase *ArchivosComprimidos.comparateAttachments*.
+	- Se documentaron las clases modificadas.

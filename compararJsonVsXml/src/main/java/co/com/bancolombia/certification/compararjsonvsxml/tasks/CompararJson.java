@@ -151,7 +151,7 @@ public class CompararJson implements Task {
 					routeFolderHijo = routeHijo + universalID;
 
 					// Descomprime los anexos y los guarda en una lista
-					List<String> nameFilesZip = descomprime.listFilesArchivoZip(routeFolder + ".zip");
+					List<String> nameFilesZip = descomprime.listFilesArchivoZip(routeFolder + ".zip",baseDeDatos);
 
 					String estadoVacio = "";
 					// Se recibe el estado (vacio, null o false) del ZIP, que indica si está o no

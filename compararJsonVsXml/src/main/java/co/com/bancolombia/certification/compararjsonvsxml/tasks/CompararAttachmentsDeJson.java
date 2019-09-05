@@ -109,7 +109,7 @@ public class CompararAttachmentsDeJson implements Task {
 					}
 
 					routeFolder = route + universalID;
-					List<String> nameFilesZip = descomprime.listFilesArchivoZip(routeFolder + ".zip");
+					List<String> nameFilesZip = descomprime.listFilesArchivoZip(routeFolder + ".zip", baseDeDatos);
 
 					System.out.println("UniversalID: " + universalID);
 
@@ -128,8 +128,7 @@ public class CompararAttachmentsDeJson implements Task {
 							} catch (Exception e) {
 								System.out.println(".::ERROR::..archivosComprimidos.comparateAttachments: " + e);
 							}
-						}
-						{
+						} else {
 							System.out
 									.println(".::Comparar Json::. EL sgte XML está vacío o no existe: " + universalID);
 							iXmlVacios++;

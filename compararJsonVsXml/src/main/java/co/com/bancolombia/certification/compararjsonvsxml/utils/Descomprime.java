@@ -58,7 +58,7 @@ public class Descomprime {
 		}
 	}
 
-	public static List<String> listFilesArchivoZip(String ficheroZip) throws Exception {
+	public static List<String> listFilesArchivoZip(String ficheroZip, String baseDeDatos) throws Exception {
 		List<String> listFiles = new ArrayList<String>();
 		ZipInputStream flujo = null;
 
@@ -77,9 +77,15 @@ public class Descomprime {
 			iCantidadZipErrados++;
 			sZipErrados += ficheroZip + "\n";
 
-			// Se envía un estado "vacío" que se utiliza en este caso para indicar que no se
-			// debe comparar con el Json porque el ZIP está vacío
-			ValidarVacio.setEstadoNull("vacio");
+			if (baseDeDatos.equals("COMEX")) {
+				ValidarVacio.setEstadoNull("vacio pero lo necesito para COMEX");
+			} else {
+
+				// Se envía un estado "vacío" que se utiliza en este caso para indicar que no se
+				// debe comparar con el Json porque el ZIP está vacío
+				ValidarVacio.setEstadoNull("vacio");
+			}
+
 		}
 		return listFiles;
 
