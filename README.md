@@ -11,6 +11,7 @@
 | 5  | Segregación de la construcción del reporte (ya está en el @ Then) que estaba inmerso en las clases de comparación. |30/08/2019 |
 | 6  | Se agregó validación de tag "*datatimepar*" para fechas en "*datetimelist*", además se implementó validación obligatoria de "**universalId.PDF**" para base de datos de COMEX.|03/09/2019|
 | 7  | Se agregó un parámetro (*baseDeDatos*) en la clase *ArchivosComprimidos.comparateAttachments* que me indica si debo incluir la validación obligatoria de "**universalId.PDF**" para la base de datos de COMEX.|04/09/2019|
+| 8 | Se agregó un nuevo universalID llamado "**universalIDCompuesto**"  para controlar los registros duplidados que se presentaron en COMEX.|14/11/2019|
 
 - **Versión 1**
 	- Se agregó el ajuste para que cuando los .ZIP estén vacíos, no se comparen con los archivos Json.
@@ -45,3 +46,5 @@
 	- Se agregó un parámetro (*String baseDeDatos*) en la clase *ArchivosComprimidos.comparateAttachments* que me indica si debo incluir la validación obligatoria de "**universalId.PDF**" para la base de datos de COMEX.
 	- Se modificaron las clases que llamaban la clase *ArchivosComprimidos.comparateAttachments*.
 	- Se documentaron las clases modificadas.
+- **Versión 8**
+	- Se agregó un nuevo universalID llamado "**universalIDCompuesto**"  para controlar los registros duplidados que se presentaron en COMEX, en la tarea ***compararJson*** se agrega éste nuevo universalID que es remplazado en la variable *routeFolder* para acceder a los archivos anexos.

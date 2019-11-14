@@ -16,7 +16,7 @@ public class CompararJsonVsXmlDefinition {
 	public void thatIConsultAJsonFileOnASpecificRouteFrom(String rutaFileXml, String rutaFileAnexo, String rutaFileJson,
 			String rutaFileLog, String rutaFilePropiedades, String rutaFileXmlHijo) {
 		actor.attemptsTo(CompararJson.conArchivoXml(rutaFileXml, rutaFileAnexo, rutaFileJson, rutaFileLog,
-				rutaFilePropiedades, rutaFileXmlHijo, "COMEX"));
+				rutaFilePropiedades, rutaFileXmlHijo, "SOLICITUDES"));
 
 //		actor.attemptsTo(CompararSoloDataJson.conArchivoXml(rutaFileXml, rutaFileAnexo, rutaFileJson, rutaFileLog,
 //				rutaFilePropiedades, rutaFileXmlHijo));

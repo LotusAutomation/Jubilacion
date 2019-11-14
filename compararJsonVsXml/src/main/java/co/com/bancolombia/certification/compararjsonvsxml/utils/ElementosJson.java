@@ -39,7 +39,7 @@ public class ElementosJson {
 		try {
 			for (int i = 0; i < itemList.getLength(); i++) {
 
-				Element firstItemElement = (Element) itemList.item(i);
+				Element firstItemElement = (Element) itemList.item(0);
 				String nodeType = firstItemElement.getFirstChild().getNodeName();
 
 				if (nodeType.equalsIgnoreCase(text)) {
@@ -159,7 +159,7 @@ public class ElementosJson {
 		try {
 			for (int i = 0; i < itemList.getLength(); i++) {
 
-				Element firstItemElement = (Element) itemList.item(i);// ACA**************************
+				Element firstItemElement = (Element) itemList.item(0);// ACA**************************
 				String nodeType = firstItemElement.getFirstChild().getNodeName();
 				NodeList textFNList = firstItemElement.getElementsByTagName(nodeType);
 
@@ -206,7 +206,9 @@ public class ElementosJson {
 
 						Element firstTextElement = (Element) textFNList.item(0);
 						boolean time = readJSONFile.findTime(firstTextElement);
-						valueFieldJSON = readJSONFile.formatosCampos.formatDate(valueFieldJSON, time, false);
+//						System.out.println("HOLAAAAAA VALOR TIME: "+readJSONFile.findTime(firstTextElement));
+//						System.out.println("HOLAAAAAA TIME BOOLEAN: "+readJSONFile.findTime(firstTextElement));
+						valueFieldJSON = readJSONFile.formatosCampos.formatDate(valueFieldJSON, time, false);//modifiqué esto
 
 						// Escribir en la lista de fallidos,que después irá a ResumenPruebasXXX.log
 						if (valueFieldJSON != "") {
@@ -246,6 +248,7 @@ public class ElementosJson {
 		String value = "";
 		try {
 			value = element.getFirstChild().getNodeValue().trim();
+			System.out.println("HOLIII: VALUE   "+value);
 		} catch (Exception e) {
 			System.out.println("ERROR:: findTime 'T' " + e);
 		}
@@ -370,7 +373,8 @@ public class ElementosJson {
 					}
 					valueFieldJSON = valueFieldJSON.trim();
 					valueField = valueField.trim();
-
+					System.out.println("getValueItem::.valueFieldJSON***" + valueFieldJSON);
+					System.out.println("getValueItem::.valueField****" + 	valueField);
 					if (valueFieldJSON.equalsIgnoreCase(valueField)) {
 
 						texto = "La información de éstos campos SI ES IGUAL ";

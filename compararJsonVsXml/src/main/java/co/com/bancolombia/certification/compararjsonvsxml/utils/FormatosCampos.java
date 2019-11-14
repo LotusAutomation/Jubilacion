@@ -90,30 +90,53 @@ public class FormatosCampos {
 	}
 
 	public String formatDate(String valueFieldJSON, boolean time, boolean isXML) {
-
+		System.out.println("================================================");
 		String dateAux = "";
 		SimpleDateFormat originalFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss a");
 		SimpleDateFormat newFormat = new SimpleDateFormat("yyyyMMdd'T'HHmmss");
 		// SimpleDateFormat newFormat = new SimpleDateFormat("dd/MM/yyyy");
-
+		System.out.println("valueFieldJSON..." + valueFieldJSON);
 		if (!time) {
-			newFormat = new SimpleDateFormat("yyyyMMdd");
-			// newFormat = new SimpleDateFormat("dd/MM/yyyy");
+			//newFormat = new SimpleDateFormat("yyyyMMdd");
+			 newFormat = new SimpleDateFormat("dd/MM/yyyy");
+			System.out.println("!time..." + newFormat);
 		}
+		System.out.println("HOLU 1");
 		if (isXML) {
 			originalFormat = new SimpleDateFormat("yyyyMMdd'T'HHmmss,SSX");
+			System.out.println("isXML..." + originalFormat);
 		}
+
+		System.out.println("HOLU 2");
 		if (isXML && !time) {
-			originalFormat = new SimpleDateFormat("dd/MM/yyyy");
+			//originalFormat = new SimpleDateFormat("dd/MM/yyyy");
+			//Se cambia formato("dd/MM/yyyy") por ("yyyyMMdd") para COMEX_19
+			originalFormat = new SimpleDateFormat("yyyyMMdd");
+			System.out.println("isXML && !time..." + originalFormat);
 		}
+		System.out.println("HOLU 3");
+
+//		if (!isXML && !time) {
+//			// originalFormat = new SimpleDateFormat("yyyyMMdd");
+//			System.out.println("!isXML || time..." + newFormat.toString());
+//			newFormat = new SimpleDateFormat("yyyyMMdd'T'HHmmss");
+//			System.out.println("!isXML || time.2.." + newFormat.toString());
+//
+//		}
+//		System.out.println("HOLU 4");
 		if (!isXML || time) {
-			//originalFormat = new SimpleDateFormat("yyyyMMdd");
+			// originalFormat = new SimpleDateFormat("yyyyMMdd");
+			System.out.println("!isXML || time..." + newFormat);
 			newFormat = new SimpleDateFormat("dd/MM/yyyy");
+			System.out.println("!isXML || time..." + newFormat);
 		}
+		System.out.println("HOLU 6");
 
 		try {
 			Date date = originalFormat.parse(valueFieldJSON.trim());
+			System.out.println("Date..." + date.toString());
 			dateAux = newFormat.format(date);
+			System.out.println("dateAux..." + dateAux.toString());
 		} catch (java.text.ParseException ex) {
 			Logger.getLogger(ElementosXml.class.getName()).log(Level.SEVERE, null, ex);
 		}

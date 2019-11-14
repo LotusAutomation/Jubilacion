@@ -131,6 +131,7 @@ public class CompararJson implements Task {
 
 					// Extrae el valor del UniversalId del Json
 					String universalID = (String) documentObj.get("UniversalID");
+					String universalIDCompuesto = (String) documentObj.get("UniversalIDCompuesto");
 					// convierte el documento el XML encontrado con el universalId Anterior
 					Document xmlDoc = ElementosXml.getDocumentByUniversalId(universalID, false, rutaFileXml,
 							rutaFileXmlHijo);
@@ -144,11 +145,11 @@ public class CompararJson implements Task {
 
 					// Se le asigna el valor de la ruta o dirección del anexo donde se encuentra el
 					// universalID
-					routeFolder = route + universalID;
+					routeFolder = route + universalIDCompuesto;
 
 					// Se le asigna el valor de la ruta o dirección de la carpeta de los XML de los
 					// hijos donde se encuentra el universalID
-					routeFolderHijo = routeHijo + universalID;
+					routeFolderHijo = routeHijo + universalIDCompuesto;
 
 					// Descomprime los anexos y los guarda en una lista
 					List<String> nameFilesZip = descomprime.listFilesArchivoZip(routeFolder + ".zip",baseDeDatos);
